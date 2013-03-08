@@ -1,0 +1,105 @@
+body {
+	margin: 0;
+	background: #f2f2f2;
+}
+.container {
+	font-size: 12px;
+	background: #f2f2f2;
+	font-family: 'Calibri';
+	display: block;
+}
+
+.connect {
+	width: 1000px;
+	color: white;
+	background-image: url(images/menu.jpg);
+	border: 1px solid black;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.connect p {
+	text-align: right;
+	color: white;
+}
+.connect a {
+	color: white;
+}
+header {
+	background-image: url(images/logo_wiki.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+	font-size: 20px;
+	height: 200px;
+	width: 1000px;
+	border: 1px solid black;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+.menu li:hover {
+	background-image: url(images/menu_li_hover.jpg);
+	-webkit-box-shadow: 3px 3px 7px #a9a7a0;
+	color: #c7c6c2;
+}
+
+.menu a:hover {
+	color: #FFFFFF;
+	text-shadow: 0px 1px 0px black;
+}
+
+.status {
+	border: 1px solid black;
+	background: #fffff6;
+	width: 990px;
+	text-align: right;
+	margin-left: auto;
+	margin-right: auto;
+	padding-right: 10px;
+}
+
+.contenu {
+	border: 1px solid black;
+	background: #fffff6;
+	width: 990px;
+	min-height: 200px;
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 10px;
+}
+
+.contenu a:link {
+	color: black;
+}
+
+.contenu a:visited {
+	color: #C3918C;
+}
+
+.contenu a:hover {
+	color: #C3918C;
+}
+.contenu a:active {
+	color: #C3918C;
+}
+
+
+footer {
+	width: 1000px;
+	color: white;
+	font-size: 12px;
+	background-image: url(images/menu.jpg);
+	border: 1px solid black;
+	margin-left: auto;
+	margin-right: auto;
+}
+footer p {
+	text-align: center;
+}
+
+a:active {
+	color: white;
+} /* lien activé */
+
