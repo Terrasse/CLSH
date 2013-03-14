@@ -272,18 +272,7 @@ public static function findByNum($num) {
 	$d=$query->fetch(PDO::FETCH_ASSOC) ;
 
 	if ($d !== false){
-   		$obj = new Famille();
-    	$obj->setAttr('no_fam', $d['NO_FAM']);
-    	$obj->setAttr('nom_resp', $d['NOM_RESP']);
-    	$obj->setAttr('pre_resp', $d['PRE_RESP']);
-		$obj->setAttr('type_resp', $d['TYPE_RESP']);
-		$obj->setAttr('adr_resp', $d['ADR_RESP']);
-		$obj->setAttr('tel_resp', $d['TEL_RESP']);
-		$obj->setAttr('noalloc_caf_resp', $d['NOALLOC_CAF_RESP']);
-		$obj->setAttr('qf_resp', $d['QF_RESP']);
-		$obj->setAttr('en_ville', $d['EN_VILLE']);
-		$obj->setAttr('bons_vac', $d['BONS_VAC']);
-    	return $obj;
+    	return FAMILLE::creerObjet($d);
     }else{
     	return false;
     }
@@ -367,6 +356,21 @@ public static function findByNom($nom) {
      return $tab;
 	 
     }
+	
+	public static function creerObjet($tab){
+		$obj = new Famille();
+    	$obj->setAttr('no_fam', $tab['NO_FAM']);
+    	$obj->setAttr('nom_resp', $tab['NOM_RESP']);
+    	$obj->setAttr('pre_resp', $tab['PRE_RESP']);
+		$obj->setAttr('type_resp', $tab['TYPE_RESP']);
+		$obj->setAttr('adr_resp', $tab['ADR_RESP']);
+		$obj->setAttr('tel_resp', $tab['TEL_RESP']);
+		$obj->setAttr('noalloc_caf_resp', $tab['NOALLOC_CAF_RESP']);
+		$obj->setAttr('qf_resp', $tab['QF_RESP']);
+		$obj->setAttr('en_ville', $tab['EN_VILLE']);
+		$obj->setAttr('bons_vac', $tab['BONS_VAC']);
+		return $obj;
+	}
 }
 
 
