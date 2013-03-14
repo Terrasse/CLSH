@@ -93,17 +93,8 @@ class Facture{
 	if (isset($this->no_fact)){
 		return $this->update();
 	}else{
-		$r = self::findByNom($this->nom_resp);
-		//si la page n'existe pas
-		if ($r == false){
-			return $this->insert();
-		}else{
-			//la page exite deja
-			//met à jour id et on update
-			$this->no_fact = $r->no_fact;
-			return $this->update();
-			}
-		}	
+		return $this->insert();
+	}	
   }
 
 
@@ -118,22 +109,22 @@ class Facture{
    */
   public function update() {
     
-	if (!isset($this->nom_resp)) {	
-      throw new Exception(__CLASS__ . ": Title undefined : cannot update");
+	if (!isset($this->montant_fact)) {	
+      throw new Exception(__CLASS__ . ": Montant_fact undefined : cannot update");
     } 
     
 	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query = $pdo ->prepare("update facture set nom_resp=:nom_resp, 
+	$query = $pdo ->prepare("update facture set montant_fact=:montant_fact, 
 				where no_fact=:no_fact");
 				
 	//liaison des parametres
-	if (isset($this->nom_resp))
-			$query->bindParam(':nom_resp',$this->nom_resp);
+	if (isset($this->montant_fact))
+			$query->bindParam(':montant_fact',$this->montant_fact);
 		else
-			$query->bindParam(':nom_resp',"null",PDO::PARAM_STR);
+			$query->bindParam(':montant_fact',"null",PDO::PARAM_STR);
 	$query->bindParam(':no_fact',$this->no_fact);
 	//lancement de la requete prépar	  
     $nb=$query->execute();
@@ -177,63 +168,22 @@ class Facture{
   public function insert() {
 
    	$pdo = Base::getConnection();
-    $insert = $pdo->prepare("INSERT INTO facture VALUES (null, :nom_resp, :pre_resp, :type_resp, :adr_resp, :tel_resp, :noalloc_caf_resp, : qf_resp, :en_ville, :bons_vac)");
+    $insert = $pdo->prepare("INSERT INTO facture VALUES (null, :date_fact, :montant_fact, :mode_paiement)");
     
-    if (isset($this->nom_resp)){
-			$insert->bindParam(':nom_resp',$this->nom_resp);
+    if (isset($this->montant_fact)){
+			$insert->bindParam(':montant_fact',$this->montant_fact);
 	}else{
-			$insert->bindParam(':nom_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':montant_fact',"null",PDO::PARAM_STR);
 	}
     
-    if (isset($this->pre_resp)){
-			$insert->bindParam(':pre_resp',$this->pre_resp);
+    if (isset($this->mode_paiement)){
+			$insert->bindParam(':mode_paiement',$this->mode_paiement);
 	}else{
-			$insert->bindParam(':pre_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->type_resp)){
-			$insert->bindParam(':type_resp',$this->type_resp);
-	}else{
-			$insert->bindParam(':type_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->adr_resp)){
-			$insert->bindParam(':adr_resp',$this->adr_resp);
-	}else{
-			$insert->bindParam(':adr_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->tel_resp)){
-			$insert->bindParam(':tel_resp',$this->tel_resp);
-	}else{
-			$insert->bindParam(':tel_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->noalloc_caf_resp)){
-			$insert->bindParam(':noalloc_caf_resp',$this->noalloc_caf_resp);
-	}else{
-			$insert->bindParam(':noalloc_caf_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->qf_resp)){
-			$insert->bindParam(':qf_resp',$this->qf_resp);
-	}else{
-			$insert->bindParam(':qf_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->en_ville)){
-			$insert->bindParam(':nom_resp',$this->nom_resp);
-	}else{
-			$insert->bindParam(':nom_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->bons_vac)){
-			$insert->bindParam(':bons_vac',$this->bons_vac);
-	}else{
-			$insert->bindParam(':bons_vac',"null",PDO::PARAM_STR);
+			$insert->bindParam(':mode_paiement',"null",PDO::PARAM_STR);
 	}
 	
 	
+	$insert->bindParam(':date_fact',date("Ymd"),PDO::PARAM_STR);
     
     $nb=$insert->execute();
     $this->setAttr('no_fact', $pdo->LastInsertId());
@@ -271,10 +221,10 @@ public static function findByNum($num) {
 	*
 	*/
 	if ($d !== false){
-   		$obj = new facture();
+   		$obj = new Facture();
     	$obj->setAttr('no_fact', $d->no_fact);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
+    	$obj->setAttr('montant_fact', strip_tags($d->montant_fact));
+    	$obj->setAttr('mode_paiement', strip_tags($d->mode_paiement));
     	return $obj;
     }else{
     	return false;
@@ -291,11 +241,11 @@ public static function findByNum($num) {
 	*   @param integer $id OID to find
 	*   @return Page renvoie un objet de type Page
 	*/
-public static function findByNom($nom) {
+public static function findByMontant($montant) {
 
 	$pdo = Base::getConnection();
-	$query = $pdo->prepare("SELECT * FROM facture WHERE nom_fam=:nom");
-	$query->bindParam(":nom",$nom);
+	$query = $pdo->prepare("SELECT * FROM facture WHERE montant_fact=:montant_fact");
+	$query->bindParam(":montant_fact",$montant);
 	//echo $query;
 	$dbres = $query->execute();
 	
@@ -311,8 +261,8 @@ public static function findByNom($nom) {
     if ($d !== false){
    		$obj = new facture();
     	$obj->setAttr('no_fact', $d->no_fact);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
+    	$obj->setAttr('montant_fact', strip_tags($d->montant_fact));
+    	$obj->setAttr('mode_paiement', strip_tags($d->mode_paiement));
     	return $obj;
     }else{
     	return false;
@@ -348,11 +298,11 @@ public static function findByNom($nom) {
           
      $tab = array();
           
-     foreach ($t as $tfam){
-     	$obj = new facture();
+     foreach ($t as $tfact){
+     	$obj = new Facture();
     	$obj->setAttr('no_fact', $d->no_fact);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
+    	$obj->setAttr('montant_fact', strip_tags($d->montant_fact));
+    	$obj->setAttr('mode_paiement', strip_tags($d->mode_paiement));
      	$tab[]=$obj;
      }
      
