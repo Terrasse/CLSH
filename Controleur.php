@@ -4,12 +4,10 @@ require_once ('Inscription.php');
 require_once ('Famille.php');
 require_once ('Site.php');
 class Controleur {
-	private static $fonctionAutorise = array('disponibilite'=>'construirePageOffre','site'=>'construirePageSite','unite' => 'contruirePageUnite','test'=>'contruirePageTest','famille'=>'contruirePageFamille');
+	private static $fonctionAutorise = array('offre'=>'construirePageOffre','site'=>'construirePageSite','unite' => 'contruirePageUnite','test'=>'contruirePageTest','famille'=>'contruirePageFamille');
 	public function analyseURL() {
-				//TODO faire un tableau + function pour chaque page
 		if (count($_REQUEST) != 0) {
 			if (array_key_exists($_REQUEST['action'], self::$fonctionAutorise)) {
-				var_dump($_POST);
 				$methode = self::$fonctionAutorise[$_REQUEST['action']];
 				$this -> $methode();
 			} else {
@@ -25,7 +23,7 @@ class Controleur {
 	public function construirePageOffre(){
 		$page=Site::findAll();
 		$vue=new Vue($page);
-		echo $vue-> affche("disponibilite");
+		echo $vue-> affiche("disponibilite");
 	}
 	
 	public function construirePageSite(){

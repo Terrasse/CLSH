@@ -33,7 +33,7 @@ class Vue {
 	
 	public function getContenuSite(){
 		$resultat="
-			<form method='post' action='index.php?action=disponibilite'>
+			<form method='post' action='index.php?action=offre'>
 		   		<p>
 		   		<label for='no_site_sel'>Selectionnez le site où vous souhaitez inscrire votre enfant</label></br>	
 		   		<select name='no_site_sel' id='no_site_sel'>";
