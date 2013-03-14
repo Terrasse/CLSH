@@ -1,11 +1,7 @@
 <?php
 class Vue {
 	private $pages;
-	private static $contenuAutorise = array('site'=>array('status'=>'getStatusSite','contenu'=>'getContenuSite'),
-											'disponibilite'=>array('status'=>'getStatusDisponibilite','contenu'=>'getContenuDisponibilite'),
-											'famille'=>array('status' => 'getStatusFamille','contenu' =>'getContenuFamille'),
-											'listetest'=>array('status' => 'getStatusTest', 'contenu' => 'getContenuTest')
-											);
+	private static $contenuAutorise = array('site' => array('status' => 'getStatusSite', 'contenu' => 'getContenuSite'), 'disponibilite' => array('status' => 'getStatusDisponibilite', 'contenu' => 'getContenuDisponibilite'), 'famille' => array('status' => 'getStatusFamille', 'contenu' => 'getContenuFamille'), 'listetest' => array('status' => 'getStatusTest', 'contenu' => 'getContenuTest'));
 
 	public function __construct($page) {
 		$this -> pages = $page;
@@ -25,33 +21,34 @@ class Vue {
 		} else
 			printf("en contruction");
 	}
+
 	// les methodes suivantes gèrent le contenu de l'affichage des Sites
-	
-	public function getStatusSite(){
+
+	public function getStatusSite() {
 		return "Page de selection du Site";
 	}
-	
-	public function getContenuSite(){
-		$resultat="
+
+	public function getContenuSite() {
+		$resultat = "
 			<form method='post' action='index.php?action=offre'>
 		   		<p>
 		   		<label for='no_site_sel'>Selectionnez le site où vous souhaitez inscrire votre enfant</label></br>	
 		   		<select name='no_site_sel' id='no_site_sel'>";
-			foreach ($this->pages as $key => $value) {
-				 $resultat.="<option value='".$value->getAttr('no_site')."'>".$value->getAttr('nom_site')."</option>";	
-			}
-		$resultat.="
+		foreach ($this->pages as $key => $value) {
+			$resultat .= "<option value='" . $value -> getAttr('no_site') . "'>" . $value -> getAttr('nom_site') . "</option>";
+		}
+		$resultat .= "
 				</select>
 				</p>
 		   		<input type='submit' value='Valider'/>
 			</form>";
 		return $resultat;
 	}
-	
+
 	// les methodes suivantes gèrent le contenu de l'affichage des Unites
-	
+
 	public function getContenuUnite() {
-		$resutat="
+		$resutat = "
 		<form method='post' action='index.php?action=disponibilite'>
 		   <p>
 		       <label for='unite'>Dans quel pays habitez-vous ?</label><br />
@@ -63,37 +60,36 @@ class Vue {
 		</form>";
 		return $resultat;
 	}
-	
+
 	// les methodes suivantes gèrent le contenu de l'affichage de disponibilités
-	
-	private function getStatusDisponibilite(){
+
+	private function getStatusDisponibilite() {
 		return "en Construction";
 	}
-	
-	private function getContenuDisponibilite(){
-			var_dump($this->pages);
-			$resultat="
+
+	private function getContenuDisponibilite() {
+		var_dump($this -> pages);
+		$resultat = "
 			<form method='post' action='index.php?action=disponibilite'>
 		   		<p>
 		   		Indiquez les périodes pour lequels vous souhaitez inscrire l'enfant ?
-		   		<input type='hidden' name='no_site_sel' value='"+$_POST['no_site_sel']+"'>
+		   		<input type='hidden' name='no_site_sel' value='" + $_POST['no_site_sel'] + "'>
 		   	";
-			foreach ($this->pages as $key => $value) {
-				$nbPlaceDispo=$value->getAttr('nb_places_offertes')-$value->getAttr('nb_places_occupees');
-				if($nbPlaceDispo>1){
-					$semaine=Semaine::findByNum($value->getAttr('sem_sej'));
-					$unite=Unite::findByNum($value->getAttr('no_unite'));
-					$resultat.="<input type='checkbox' name='"+$value->getAttr('no_unite_sel')+"' id='"+$value->getAttr('no_unite_sel')+"' /> <label for='"+$value->getAttr('no_unite_sel')+"'>"+$unite->getAttr('nom_unite')+ " du "+$semaine->getAttr('du_sem')+" au "+$semaine->getAttr('au_sem')+" | nombre de place disponible : "+ $nbPlaceDispo +"</label>";
-				}	
+		foreach ($this->pages as $key => $value) {
+			$nbPlaceDispo = $value -> getAttr('nb_places_offertes') - $value -> getAttr('nb_places_occupees');
+			if ($nbPlaceDispo > 1) {
+				$semaine = Semaine::findByNum($value -> getAttr('sem_sej'));
+				$unite = Unite::findByNum($value -> getAttr('no_unite'));
+				$resultat .= "<input type='checkbox' name='" + $value -> getAttr('no_unite_sel') + "' id='" + $value -> getAttr('no_unite_sel') + "' /> <label for='" + $value -> getAttr('no_unite_sel') + "'>" + $unite -> getAttr('nom_unite') + " du " + $semaine -> getAttr('du_sem') + " au " + $semaine -> getAttr('au_sem') + " | nombre de place disponible : " + $nbPlaceDispo + "</label>";
 			}
-			var_dump($resultat);
-			$resultat.="
+		}
+		var_dump($resultat);
+		$resultat .= "
 				<input type='submit' value='Valider'/>
 				</p>
 			</form>";
 		return $resultat;
 	}
-	
 
 	// les methodes suivantes gèrent le contenu de l'affichage des TESTs
 
