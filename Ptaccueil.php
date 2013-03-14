@@ -1,21 +1,19 @@
 <?php
 
 /**
- *  La classe Facture
+ *  La classe PTAccueil
  *
- *  La Classe facture  realise un Active Record sur la table facture
+ *  La Classe PTAccueil  realise un Active Record sur la table PTAccueil
  *  
  *
  *  @package ACSI
  */
  
-class Facture{
+class PTAccueil{
 
  
-  private $no_fact;
-  private $date_fact;
-  private $montant_fact;
-  private $mode_paiement;
+  private $arret_bus;
+  private $no_site;
 
   
   public function __construct() {
@@ -90,7 +88,7 @@ class Facture{
    */
   public function save() {
 	//si la page possède un id on met à jour
-	if (isset($this->no_fact)){
+	if (isset($this->arret_bus)){
 		return $this->update();
 	}else{
 		return $this->insert();
@@ -109,23 +107,23 @@ class Facture{
    */
   public function update() {
     
-	if (!isset($this->montant_fact)) {	
-      throw new Exception(__CLASS__ . ": Montant_fact undefined : cannot update");
+	if (!isset($this->no_site)) {	
+      throw new Exception(__CLASS__ . ": Numero du site undefined : cannot update");
     } 
     
 	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query = $pdo ->prepare("update facture set montant_fact=:montant_fact, 
-				where no_fact=:no_fact");
+	$query = $pdo ->prepare("update PTAccueil set no_site =:no_site, 
+				where arret_bus=:arret_bus");
 				
 	//liaison des parametres
-	if (isset($this->montant_fact))
-			$query->bindParam(':montant_fact',$this->montant_fact);
+	if (isset($this->no_site))
+			$query->bindParam(':no_site',$this->no_site);
 		else
-			$query->bindParam(':montant_fact',"null",PDO::PARAM_STR);
-	$query->bindParam(':no_fact',$this->no_fact);
+			$query->bindParam(':no_site',"null",PDO::PARAM_STR);
+	$query->bindParam(':arret_bus',$this->arret_bus);
 	//lancement de la requete prépar	  
     $nb=$query->execute();
     
@@ -144,9 +142,9 @@ class Facture{
     
     $pdo = Base::getConnection();
     
-	if (isset($this->no_fact)){ 
-		$delete = $pdo->prepare("DELETE FROM facture WHERE no_fact = :no_fact");
-		$delete->bindParam(':no_fact',$this->no_fact);
+	if (isset($this->arret_bus)){ 
+		$delete = $pdo->prepare("DELETE FROM PTAccueil WHERE arret_bus = :arret_bus");
+		$delete->bindParam(':arret_bus',$this->arret_bus);
      	
      	$nb = $delete->execute();  
 	 }else{
@@ -168,25 +166,16 @@ class Facture{
   public function insert() {
 
    	$pdo = Base::getConnection();
-    $insert = $pdo->prepare("INSERT INTO facture VALUES (null, :date_fact, :montant_fact, :mode_paiement)");
-    
-    if (isset($this->montant_fact)){
-			$insert->bindParam(':montant_fact',$this->montant_fact);
-	}else{
-			$insert->bindParam(':montant_fact',"null",PDO::PARAM_STR);
-	}
-    
-    if (isset($this->mode_paiement)){
-			$insert->bindParam(':mode_paiement',$this->mode_paiement);
-	}else{
-			$insert->bindParam(':mode_paiement',"null",PDO::PARAM_STR);
-	}
+    $insert = $pdo->prepare("INSERT INTO PTAccueil VALUES (null, :no_site)");
 	
-	
-	$insert->bindParam(':date_fact',date("Ymd"),PDO::PARAM_STR);
+	if (isset($this->no_site)){
+			$insert->bindParam(':no_site',$this->no_site);
+	}else{
+			$insert->bindParam(':no_site',"null",PDO::PARAM_STR);
+	}
     
     $nb=$insert->execute();
-    $this->setAttr('no_fact', $pdo->LastInsertId());
+    $this->setAttr('arret_bus', $pdo->LastInsertId());
 	$this->update();
 	
 	return $nb;
@@ -208,7 +197,7 @@ public static function findByNum($num) {
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query =$pdo->prepare("SELECT * FROM facture WHERE no_fact=:num");
+	$query =$pdo->prepare("SELECT * FROM PTAccueil WHERE arret_bus=:num");
 	$query->bindParam(':num',$num);
 	
 	$dbres = $query->execute();
@@ -221,7 +210,7 @@ public static function findByNum($num) {
 	*
 	*/
 	if ($d !== false){
-    	return FACTURE::creerObjet($d);
+    	return PTAccueil::creerObjet($d);
     }else{
     	return false;
     }
@@ -237,11 +226,11 @@ public static function findByNum($num) {
 	*   @param integer $id OID to find
 	*   @return Page renvoie un objet de type Page
 	*/
-public static function findByMontant($montant) {
+public static function findBySite($id) {
 
 	$pdo = Base::getConnection();
-	$query = $pdo->prepare("SELECT * FROM facture WHERE montant_fact=:montant_fact");
-	$query->bindParam(":montant_fact",$montant);
+	$query = $pdo->prepare("SELECT * FROM PTAccueil WHERE no_site=:id");
+	$query->bindParam(":id",$id);
 	//echo $query;
 	$dbres = $query->execute();
 	
@@ -255,7 +244,7 @@ public static function findByMontant($montant) {
 	*/
       
     if ($d !== false){
-    	return FACTURE::creerObjet($d);
+    	return PTAccueil::creerObjet($d);
     }else{
     	return false;
     }
@@ -284,14 +273,14 @@ public static function findByMontant($montant) {
      */
      
      $pdo = Base::getConnection();
-     $query = "SELECT * FROM facture";
+     $query = "SELECT * FROM PTAccueil";
      $dbres = $pdo->query($query);
      $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
           
      $tab = array();
           
      foreach ($t as $tfact){
-     	$tab[]=FACTURE::creerObjet($t);
+     	$tab[]=PTAccueil::creerObjet($t);
      }
      
      return $tab;
@@ -299,11 +288,9 @@ public static function findByMontant($montant) {
     }
     
      public static function creerObjet($tab){
-		$obj = new Facture();
-    	$obj->setAttr('no_fact', $tab['NO_FACT']);
-    	$obj->setAttr('date_fact', $tab['DATE_FACT']);
-    	$obj->setAttr('montant_fact', $tab['MONTAN_FACT']);
-		$obj->setAttr('mode_paiement', $tab['MODE_PAIEMENT']);
+		$obj = new PTAccueil();
+    	$obj->setAttr('arret_bus', $tab['ARRET_BUS']);
+		$obj->setAttr('no_site', $tab['NO_SITE']);
 		return $obj;
 	}
     

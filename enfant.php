@@ -255,18 +255,9 @@ public static function findByNum($num) {
 	$dbres = $query->execute();
 	
 	$d=$query->fetch(PDO::FETCH_OBJ) ;
-
-	/**
-	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
-	*   OBJET INSTANCE DE LA CLASSE Page
-	*
-	*/
+	
 	if ($d !== false){
-   		$obj = new Enfant();
-    	$obj->setAttr('numero', $d->numero);
-    	$obj->setAttr('nom', strip_tags($d->nom));
-    	$obj->setAttr('prenom', strip_tags($d->prenom));
-    	return $obj;
+   		return ENFANT::creerObjet($d);
     }else{
     	return false;
     }
@@ -291,20 +282,9 @@ public static function findByNom($nom) {
 	$dbres = $query->execute();
 	
 	$d = $query->fetch(PDO::FETCH_OBJ) ;
-	
-	
-	/**
-	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
-	*   OBJET INSTANCE DE LA CLASSE Page
-	*
-	*/
       
     if ($d !== false){
-   		$obj = new Enfant();
-    	$obj->setAttr('numero', $d->numero);
-    	$obj->setAttr('nom', strip_tags($d->nom));
-    	$obj->setAttr('prenom', strip_tags($d->prenom));
-    	return $obj;
+   		return ENFANT::creerObjet($d);
     }else{
     	return false;
     }
@@ -332,11 +312,7 @@ public static function findByNom($nom) {
      $tab = array();
           
      foreach ($t as $tenf){
-     	$obj = new Enfant();
-    	$obj->setAttr('numero', $d->numero);
-    	$obj->setAttr('nom', strip_tags($d->nom));
-    	$obj->setAttr('prenom', strip_tags($d->prenom));
-     	$tab[]=$obj;
+     	$tab[]=ENFANT::creerObjet($t);
      }
      
      return $tab;
@@ -364,17 +340,26 @@ public static function findByNom($nom) {
      $tab = array();
           
      foreach ($t as $tenf){
-     	$obj = new Enfant();
-    	$obj->setAttr('no_enf', $d->numero);
-    	$obj->setAttr('no_fam', $d->numero_famille);
-    	$obj->setAttr('nom', strip_tags($d->nom));
-    	$obj->setAttr('prenom', strip_tags($d->prenom));
-     	$tab[]=$obj;
+     	$tab[]=ENFANT::creerObjet($t);
      }
      
      return $tab;
 	 
     }
+    
+    public static function creerObjet($tab){
+		$obj = new Enfant();
+    	$obj->setAttr('numero', $tab['NO_ENF']);
+    	$obj->setAttr('numero_famille', $tab['NO_FAM']);
+    	$obj->setAttr('nom', $tab['NOM_ENF']);
+		$obj->setAttr('prenom', $tab['PRE_ENF']);
+		$obj->setAttr('adresse', $tab['ADR_ENF']);
+		$obj->setAttr('sexe', $tab['SEXE_ENF']);
+		$obj->setAttr('date_naissance', $tab['DATN_ENF']);
+		$obj->setAttr('lieu_naissance', $tab['LIEU_NAISS_ENF']);
+		return $obj;
+	}
+   
 }
 
 

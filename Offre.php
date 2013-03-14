@@ -1,21 +1,21 @@
 <?php
 
 /**
- *  La classe Facture
+ *  La classe Offre
  *
- *  La Classe facture  realise un Active Record sur la table facture
- *  
+ *  La Classe Offre  realise un Active Record sur la table Offre
+ *  À TERMINER !!!!!!!!!!!!!!!!!
  *
  *  @package ACSI
  */
  
-class Facture{
+class Offre{
 
  
-  private $no_fact;
-  private $date_fact;
-  private $montant_fact;
-  private $mode_paiement;
+  private $no_unite;
+  private $sem_sej;
+  private $nb_places_offertes;
+  private $nb_places_occupees;
 
   
   public function __construct() {
@@ -90,7 +90,7 @@ class Facture{
    */
   public function save() {
 	//si la page possède un id on met à jour
-	if (isset($this->no_fact)){
+	if (isset($this->no_unite)){
 		return $this->update();
 	}else{
 		return $this->insert();
@@ -109,16 +109,16 @@ class Facture{
    */
   public function update() {
     
-	if (!isset($this->montant_fact)) {	
-      throw new Exception(__CLASS__ . ": Montant_fact undefined : cannot update");
+	if (!isset($this->sem_sej)) {	
+      throw new Exception(__CLASS__ . ": Semaine de séjour undefined : cannot update");
     } 
     
 	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query = $pdo ->prepare("update facture set montant_fact=:montant_fact, 
-				where no_fact=:no_fact");
+	$query = $pdo ->prepare("update Offre set sem_sej=:sem_sej, 
+				where no_unite=:no_unite");
 				
 	//liaison des parametres
 	if (isset($this->montant_fact))
@@ -145,7 +145,7 @@ class Facture{
     $pdo = Base::getConnection();
     
 	if (isset($this->no_fact)){ 
-		$delete = $pdo->prepare("DELETE FROM facture WHERE no_fact = :no_fact");
+		$delete = $pdo->prepare("DELETE FROM Offre WHERE no_fact = :no_fact");
 		$delete->bindParam(':no_fact',$this->no_fact);
      	
      	$nb = $delete->execute();  
@@ -168,7 +168,7 @@ class Facture{
   public function insert() {
 
    	$pdo = Base::getConnection();
-    $insert = $pdo->prepare("INSERT INTO facture VALUES (null, :date_fact, :montant_fact, :mode_paiement)");
+    $insert = $pdo->prepare("INSERT INTO Offre VALUES (null, :date_fact, :montant_fact, :mode_paiement)");
     
     if (isset($this->montant_fact)){
 			$insert->bindParam(':montant_fact',$this->montant_fact);
@@ -208,7 +208,7 @@ public static function findByNum($num) {
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query =$pdo->prepare("SELECT * FROM facture WHERE no_fact=:num");
+	$query =$pdo->prepare("SELECT * FROM Offre WHERE no_fact=:num");
 	$query->bindParam(':num',$num);
 	
 	$dbres = $query->execute();
@@ -221,7 +221,7 @@ public static function findByNum($num) {
 	*
 	*/
 	if ($d !== false){
-    	return FACTURE::creerObjet($d);
+    	return Offre::creerObjet($d);
     }else{
     	return false;
     }
@@ -240,7 +240,7 @@ public static function findByNum($num) {
 public static function findByMontant($montant) {
 
 	$pdo = Base::getConnection();
-	$query = $pdo->prepare("SELECT * FROM facture WHERE montant_fact=:montant_fact");
+	$query = $pdo->prepare("SELECT * FROM Offre WHERE montant_fact=:montant_fact");
 	$query->bindParam(":montant_fact",$montant);
 	//echo $query;
 	$dbres = $query->execute();
@@ -255,7 +255,7 @@ public static function findByMontant($montant) {
 	*/
       
     if ($d !== false){
-    	return FACTURE::creerObjet($d);
+    	return Offre::creerObjet($d);
     }else{
     	return false;
     }
@@ -284,14 +284,14 @@ public static function findByMontant($montant) {
      */
      
      $pdo = Base::getConnection();
-     $query = "SELECT * FROM facture";
+     $query = "SELECT * FROM Offre";
      $dbres = $pdo->query($query);
      $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
           
      $tab = array();
           
      foreach ($t as $tfact){
-     	$tab[]=FACTURE::creerObjet($t);
+     	$tab[]=Offre::creerObjet($t);
      }
      
      return $tab;
@@ -299,7 +299,7 @@ public static function findByMontant($montant) {
     }
     
      public static function creerObjet($tab){
-		$obj = new Facture();
+		$obj = new Offre();
     	$obj->setAttr('no_fact', $tab['NO_FACT']);
     	$obj->setAttr('date_fact', $tab['DATE_FACT']);
     	$obj->setAttr('montant_fact', $tab['MONTAN_FACT']);

@@ -306,11 +306,7 @@ public static function findByNom($nom) {
 	*/
       
     if ($d !== false){
-   		$obj = new famille();
-    	$obj->setAttr('no_fam', $d->no_fam);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
-    	return $obj;
+   		return FAMILLE::creerObjet($d);
     }else{
     	return false;
     }
@@ -346,11 +342,7 @@ public static function findByNom($nom) {
      $tab = array();
           
      foreach ($t as $tfam){
-     	$obj = new Famille();
-    	$obj->setAttr('no_fam', $d->no_fam);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
-     	$tab[]=$obj;
+     	$tab[]=FAMILLE::creerObjet($t);
      }
      
      return $tab;

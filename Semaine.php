@@ -1,21 +1,21 @@
 <?php
 
 /**
- *  La classe Facture
+ *  La classe Semaine
  *
- *  La Classe facture  realise un Active Record sur la table facture
+ *  La Classe Semaine  realise un Active Record sur la table Semaine
  *  
  *
  *  @package ACSI
  */
  
-class Facture{
+class Semaine{
 
  
-  private $no_fact;
-  private $date_fact;
-  private $montant_fact;
-  private $mode_paiement;
+  private $sem_sej;
+  private $du_sem;
+  private $au_sem;
+  private $nbj_sem;
 
   
   public function __construct() {
@@ -90,7 +90,7 @@ class Facture{
    */
   public function save() {
 	//si la page possède un id on met à jour
-	if (isset($this->no_fact)){
+	if (isset($this->sem_sej)){
 		return $this->update();
 	}else{
 		return $this->insert();
@@ -109,23 +109,23 @@ class Facture{
    */
   public function update() {
     
-	if (!isset($this->montant_fact)) {	
-      throw new Exception(__CLASS__ . ": Montant_fact undefined : cannot update");
-    } 
+	if (!isset($this->nbj_sem)) {	
+      throw new Exception(__CLASS__ . ": Nombre de jours undefined : cannot update");
+    }
     
 	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query = $pdo ->prepare("update facture set montant_fact=:montant_fact, 
-				where no_fact=:no_fact");
+	$query = $pdo ->prepare("update Semaine set nbj_sem=:nbj_sem, 
+				where sem_sej=:sem_sej");
 				
 	//liaison des parametres
 	if (isset($this->montant_fact))
-			$query->bindParam(':montant_fact',$this->montant_fact);
+			$query->bindParam(':nbj_sem',$this->nbj_sem);
 		else
-			$query->bindParam(':montant_fact',"null",PDO::PARAM_STR);
-	$query->bindParam(':no_fact',$this->no_fact);
+			$query->bindParam(':nbj_sem',"null",PDO::PARAM_STR);
+	$query->bindParam(':sem_sej',$this->no_fact);
 	//lancement de la requete prépar	  
     $nb=$query->execute();
     
@@ -145,8 +145,8 @@ class Facture{
     $pdo = Base::getConnection();
     
 	if (isset($this->no_fact)){ 
-		$delete = $pdo->prepare("DELETE FROM facture WHERE no_fact = :no_fact");
-		$delete->bindParam(':no_fact',$this->no_fact);
+		$delete = $pdo->prepare("DELETE FROM Semaine WHERE sem_sej = :sem_sej");
+		$delete->bindParam(':sem_sej',$this->sem_sej);
      	
      	$nb = $delete->execute();  
 	 }else{
@@ -168,25 +168,28 @@ class Facture{
   public function insert() {
 
    	$pdo = Base::getConnection();
-    $insert = $pdo->prepare("INSERT INTO facture VALUES (null, :date_fact, :montant_fact, :mode_paiement)");
+    $insert = $pdo->prepare("INSERT INTO Semaine VALUES (null, :du_sem, :au_sem, :nbj_sem)");
     
-    if (isset($this->montant_fact)){
-			$insert->bindParam(':montant_fact',$this->montant_fact);
+    if (isset($this->du_sem)){
+			$insert->bindParam(':du_sem',$this->du_sem);
 	}else{
-			$insert->bindParam(':montant_fact',"null",PDO::PARAM_STR);
+			$insert->bindParam(':du_sem',"null",PDO::PARAM_STR);
 	}
     
-    if (isset($this->mode_paiement)){
-			$insert->bindParam(':mode_paiement',$this->mode_paiement);
+    if (isset($this->au_sem)){
+			$insert->bindParam(':au_sem',$this->au_sem);
 	}else{
-			$insert->bindParam(':mode_paiement',"null",PDO::PARAM_STR);
+			$insert->bindParam(':au_sem',"null",PDO::PARAM_STR);
 	}
 	
-	
-	$insert->bindParam(':date_fact',date("Ymd"),PDO::PARAM_STR);
+	if (isset($this->nbj_sem)){
+			$insert->bindParam(':nbj_sem',$this->nbj_sem);
+	}else{
+			$insert->bindParam(':nbj_sem',"null",PDO::PARAM_STR);
+	}
     
     $nb=$insert->execute();
-    $this->setAttr('no_fact', $pdo->LastInsertId());
+    $this->setAttr('sem_sej', $pdo->LastInsertId());
 	$this->update();
 	
 	return $nb;
@@ -208,7 +211,7 @@ public static function findByNum($num) {
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query =$pdo->prepare("SELECT * FROM facture WHERE no_fact=:num");
+	$query =$pdo->prepare("SELECT * FROM Semaine WHERE sem_sej=:num");
 	$query->bindParam(':num',$num);
 	
 	$dbres = $query->execute();
@@ -221,45 +224,10 @@ public static function findByNum($num) {
 	*
 	*/
 	if ($d !== false){
-    	return FACTURE::creerObjet($d);
+    	return Semaine::creerObjet($d);
     }else{
     	return false;
     }
-}
-
-/**
-	*   Finder sur title
-	*
-	*   Retrouve la ligne de la table correspondant au title passé en paramètre,
-	*   retourne un objet ou false si la page n'existe pas
-	*  
-	*   @static
-	*   @param integer $id OID to find
-	*   @return Page renvoie un objet de type Page
-	*/
-public static function findByMontant($montant) {
-
-	$pdo = Base::getConnection();
-	$query = $pdo->prepare("SELECT * FROM facture WHERE montant_fact=:montant_fact");
-	$query->bindParam(":montant_fact",$montant);
-	//echo $query;
-	$dbres = $query->execute();
-	
-	$d = $query->fetch(PDO::FETCH_OBJ) ;
-	
-	
-	/**
-	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
-	*   OBJET INSTANCE DE LA CLASSE Page
-	*
-	*/
-      
-    if ($d !== false){
-    	return FACTURE::creerObjet($d);
-    }else{
-    	return false;
-    }
-
 }
 
     
@@ -284,14 +252,14 @@ public static function findByMontant($montant) {
      */
      
      $pdo = Base::getConnection();
-     $query = "SELECT * FROM facture";
+     $query = "SELECT * FROM Semaine";
      $dbres = $pdo->query($query);
      $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
           
      $tab = array();
           
      foreach ($t as $tfact){
-     	$tab[]=FACTURE::creerObjet($t);
+     	$tab[]=Semaine::creerObjet($t);
      }
      
      return $tab;
@@ -299,11 +267,11 @@ public static function findByMontant($montant) {
     }
     
      public static function creerObjet($tab){
-		$obj = new Facture();
-    	$obj->setAttr('no_fact', $tab['NO_FACT']);
-    	$obj->setAttr('date_fact', $tab['DATE_FACT']);
-    	$obj->setAttr('montant_fact', $tab['MONTAN_FACT']);
-		$obj->setAttr('mode_paiement', $tab['MODE_PAIEMENT']);
+		$obj = new Semaine();
+    	$obj->setAttr('sem_sej', $tab['SEM_SEJ']);
+    	$obj->setAttr('du_sem', $tab['DU_SEM']);
+    	$obj->setAttr('au_sem', $tab['AU_SEM']);
+		$obj->setAttr('nbj_sem', $tab['NBJ_SEM']);
 		return $obj;
 	}
     

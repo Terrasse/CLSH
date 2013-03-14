@@ -39,7 +39,7 @@ class inscription{
    */
   public function __toString() {
         return "[". __CLASS__ . "] nom : ". $this->nom . "
-				   prenom  ". $this->prenom . "no_inscription : ". $this->no_inscription;
+				   prenom  ". $this->prenom . "no_fam : ". $this->no_fam;
   }
 
   /**
@@ -99,7 +99,7 @@ class inscription{
 	if (isset($this->no_inscription)){
 		return $this->update();
 	}else{
-		$r = self::findByNom($this->nom_resp);
+		$r = self::findByEnf($this->no_enf);
 		//si la page n'existe pas
 		if ($r == false){
 			return $this->insert();
@@ -124,23 +124,45 @@ class inscription{
    */
   public function update() {
     
-	if (!isset($this->nom_resp)) {	
-      throw new Exception(__CLASS__ . ": Title undefined : cannot update");
+	if (!isset($this->no_fact)) {	
+      throw new Exception(__CLASS__ . ": Facture undefined : cannot update");
+    } 
+    
+    if (!isset($this->no_unite)) {	
+      throw new Exception(__CLASS__ . ": Unite undefined : cannot update");
+    } 
+    
+    if (!isset($this->no_enf)) {	
+      throw new Exception(__CLASS__ . ": Enfant undefined : cannot update");
     } 
     
 	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query = $pdo ->prepare("update inscription set nom_resp=:nom_resp, 
+	$query = $pdo ->prepare("update Inscription set no_fact=:no_fact, no_unite=:no_unite, no_enf=:no_enf,
 				where no_inscription=:no_inscription");
 				
 	//liaison des parametres
-	if (isset($this->nom_resp))
-			$query->bindParam(':nom_resp',$this->nom_resp);
-		else
-			$query->bindParam(':nom_resp',"null",PDO::PARAM_STR);
-	$query->bindParam(':no_inscription',$this->no_inscription);
+	if (isset($this->no_fact)){
+			$insert->bindParam(':no_fact',$this->no_fact);
+	}else{
+			$insert->bindParam(':no_fact',"null",PDO::PARAM_STR);
+	}
+	
+	if (isset($this->no_unite)){
+			$insert->bindParam('::no_unite',$this->:no_unite);
+	}else{
+			$insert->bindParam('::no_unite',"null",PDO::PARAM_STR);
+	}
+	
+	if (isset($this->no_enf)){
+			$insert->bindParam(':no_enf',$this->no_enf);
+	}else{
+			$insert->bindParam(':no_enf',"null",PDO::PARAM_STR);
+	}
+	
+	$query->bindParam(':no_fam',$this->no_fam);
 	//lancement de la requete prépar	  
     $nb=$query->execute();
     
@@ -160,7 +182,7 @@ class inscription{
     $pdo = Base::getConnection();
     
 	if (isset($this->no_inscription)){ 
-		$delete = $pdo->prepare("DELETE FROM inscription WHERE no_inscription = :no_inscription");
+		$delete = $pdo->prepare("DELETE FROM Inscription WHERE no_inscription = :no_inscription");
 		$delete->bindParam(':no_inscription',$this->no_inscription);
      	
      	$nb = $delete->execute();  
@@ -183,60 +205,54 @@ class inscription{
   public function insert() {
 
    	$pdo = Base::getConnection();
-    $insert = $pdo->prepare("INSERT INTO inscription VALUES (null, :nom_resp, :pre_resp, :type_resp, :adr_resp, :tel_resp, :noalloc_caf_resp, : qf_resp, :en_ville, :bons_vac)");
+    $insert = $pdo->prepare("INSERT INTO famille VALUES (null, :no_fact, :arret_bus, :no_unite, :no_enf, :deduc_jour, :nom_accompagnateur_enf, : pre_accompagnateur_enf, :montant_inscr, :lieu_inscr)");
     
-    if (isset($this->nom_resp)){
-			$insert->bindParam(':nom_resp',$this->nom_resp);
+    if (isset($this->no_fact)){
+			$insert->bindParam(':no_fact',$this->no_fact);
 	}else{
-			$insert->bindParam(':nom_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':no_fact',"null",PDO::PARAM_STR);
 	}
     
-    if (isset($this->pre_resp)){
-			$insert->bindParam(':pre_resp',$this->pre_resp);
+    if (isset($this->arret_bus)){
+			$insert->bindParam(':arret_bus',$this->arret_bus);
 	}else{
-			$insert->bindParam(':pre_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':arret_bus',"null",PDO::PARAM_STR);
 	}
 	
-	if (isset($this->type_resp)){
-			$insert->bindParam(':type_resp',$this->type_resp);
+	if (isset($this->no_unite)){
+			$insert->bindParam('::no_unite',$this->:no_unite);
 	}else{
-			$insert->bindParam(':type_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam('::no_unite',"null",PDO::PARAM_STR);
 	}
 	
-	if (isset($this->adr_resp)){
-			$insert->bindParam(':adr_resp',$this->adr_resp);
+	if (isset($this->no_enf)){
+			$insert->bindParam(':no_enf',$this->no_enf);
 	}else{
-			$insert->bindParam(':adr_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':no_enf',"null",PDO::PARAM_STR);
 	}
 	
-	if (isset($this->tel_resp)){
-			$insert->bindParam(':tel_resp',$this->tel_resp);
+	if (isset($this->deduc_jour)){
+			$insert->bindParam(':deduc_jour',$this->deduc_jour);
 	}else{
-			$insert->bindParam(':tel_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':deduc_jour',"null",PDO::PARAM_STR);
 	}
 	
-	if (isset($this->noalloc_caf_resp)){
-			$insert->bindParam(':noalloc_caf_resp',$this->noalloc_caf_resp);
+	if (isset($this->nom_accompagnateur_enf)){
+			$insert->bindParam(':nom_accompagnateur_enf',$this->nom_accompagnateur_enf);
 	}else{
-			$insert->bindParam(':noalloc_caf_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':nom_accompagnateur_enf',"null",PDO::PARAM_STR);
 	}
 	
-	if (isset($this->qf_resp)){
-			$insert->bindParam(':qf_resp',$this->qf_resp);
+	if (isset($this->pre_accompagnateur_enf)){
+			$insert->bindParam(':pre_accompagnateur_enf',$this->pre_accompagnateur_enf);
 	}else{
-			$insert->bindParam(':qf_resp',"null",PDO::PARAM_STR);
+			$insert->bindParam(':pre_accompagnateur_enf',"null",PDO::PARAM_STR);
 	}
 	
-	if (isset($this->en_ville)){
-			$insert->bindParam(':nom_resp',$this->nom_resp);
+	if (isset($this->lieu_inscr)){
+			$insert->bindParam(':lieu_inscr',$this->lieu_inscr);
 	}else{
-			$insert->bindParam(':nom_resp',"null",PDO::PARAM_STR);
-	}
-	
-	if (isset($this->bons_vac)){
-			$insert->bindParam(':bons_vac',$this->bons_vac);
-	}else{
-			$insert->bindParam(':bons_vac',"null",PDO::PARAM_STR);
+			$insert->bindParam(':lieu_inscr',"null",PDO::PARAM_STR);
 	}
 	
 	
@@ -264,24 +280,15 @@ public static function findByNum($num) {
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query =$pdo->prepare("SELECT * FROM inscription WHERE no_inscription=:num");
+	$query =$pdo->prepare("SELECT * FROM Inscription WHERE no_inscription=:num");
 	$query->bindParam(':num',$num);
 	
 	$dbres = $query->execute();
 	
-	$d=$query->fetch(PDO::FETCH_OBJ) ;
+	$d=$query->fetch(PDO::FETCH_ASSOC) ;
 
-	/**
-	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
-	*   OBJET INSTANCE DE LA CLASSE Page
-	*
-	*/
 	if ($d !== false){
-   		$obj = new inscription();
-    	$obj->setAttr('no_inscription', $d->no_inscription);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
-    	return $obj;
+    	return INSCRIPTION::creerObjet($d);
     }else{
     	return false;
     }
@@ -297,11 +304,11 @@ public static function findByNum($num) {
 	*   @param integer $id OID to find
 	*   @return Page renvoie un objet de type Page
 	*/
-public static function findByNom($nom) {
+public static function findByEnf($id) {
 
 	$pdo = Base::getConnection();
-	$query = $pdo->prepare("SELECT * FROM inscription WHERE nom_fam=:nom");
-	$query->bindParam(":nom",$nom);
+	$query = $pdo->prepare("SELECT * FROM Inscription WHERE no_enf=:id");
+	$query->bindParam(":id",$id);
 	//echo $query;
 	$dbres = $query->execute();
 	
@@ -315,11 +322,7 @@ public static function findByNom($nom) {
 	*/
       
     if ($d !== false){
-   		$obj = new inscription();
-    	$obj->setAttr('no_inscription', $d->no_inscription);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
-    	return $obj;
+   		return INSCRIPTION::creerObjet($d);
     }else{
     	return false;
     }
@@ -348,23 +351,36 @@ public static function findByNom($nom) {
      */
      
      $pdo = Base::getConnection();
-     $query = "SELECT * FROM inscription";
+     $query = "SELECT * FROM Inscription";
      $dbres = $pdo->query($query);
      $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
           
      $tab = array();
           
      foreach ($t as $tfam){
-     	$obj = new inscription();
-    	$obj->setAttr('no_inscription', $d->no_inscription);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
-     	$tab[]=$obj;
+     	$tab[]=INSCRIPTION::creerObjet($t);
      }
      
      return $tab;
 	 
     }
+    
+    public static function creerObjet($tab){
+		$obj = new Inscription();
+    	$obj->setAttr('no_inscription', $tab['NO_INSCRIPTION']);
+    	$obj->setAttr('no_fact', $tab['NO_FACT']);
+    	$obj->setAttr('arret_bus', $tab['ARRET_BUS']);
+		$obj->setAttr('no_unite', $tab['NO_UNITE']);
+		$obj->setAttr('no_enf', $tab['NO_ENF']);
+		$obj->setAttr('deduc_jour', $tab['DEDUC_JOUR']);
+		$obj->setAttr('nom_accompagnateur_enf', $tab['NOM_ACCOMPAGNATEUR_ENF']);
+		$obj->setAttr('pre_accompagnateur_enf', $tab['PRE_ACCOMPAGNATEUR_ENF']);
+		$obj->setAttr('montant_inscr', $tab['MONTANT_INSCR']);
+		$obj->setAttr('lieu_inscr', $tab['LIEU_INSCR']);
+		return $obj;
+	}
+	
+	
 }
 
 
