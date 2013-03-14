@@ -3,6 +3,7 @@ require_once ('Vue.php');
 require_once ('Inscription.php');
 require_once ('Famille.php');
 require_once ('Site.php');
+require_once ('Offre.php');
 class Controleur {
 	private static $fonctionAutorise = array('offre'=>'construirePageOffre','site'=>'construirePageSite','unite' => 'contruirePageUnite','test'=>'contruirePageTest','famille'=>'contruirePageFamille');
 	public function analyseURL() {
@@ -21,7 +22,7 @@ class Controleur {
 	}
 	
 	public function construirePageOffre(){
-		$page=Site::findAll();
+		$page=Offre::findByUnite($_POST['no_site_sel']);
 		$vue=new Vue($page);
 		echo $vue-> affiche("disponibilite");
 	}
