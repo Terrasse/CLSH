@@ -47,8 +47,8 @@ class Offre {
 		if (property_exists(__CLASS__, $attr_name)) {
 			return $this -> $attr_name;
 		}
-		$emess = __CLASS__ . ": unknown member $attr_name (getAttr)";
-		throw new Exception($emess, 45);
+			$emess = __CLASS__ . ": unknown member $attr_name (getAttr)";
+			throw new Exception($emess, 45);
 	}
 
 	/**
@@ -205,10 +205,11 @@ class Offre {
 	 *   @return Page renvoie un objet de type Page
 	 */
 	public static function findByUnite($id) {
+		var_dump($id);
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("SELECT * FROM Offre WHERE no_unite=:id");
+		$query = $pdo -> prepare("SELECT * FROM offre WHERE no_unite=:id");
 		$query -> bindParam(':id', $id);
 
 		$dbres = $query -> execute();
