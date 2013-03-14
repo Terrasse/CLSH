@@ -61,11 +61,19 @@ class Vue {
     				
     				<label for='pre_resp_new'>Prenom : </label>
     				<input type='text' name='pre_resp_new' placeholder='necessaire' required/></br>
+<<<<<<< HEAD
     				<label for='type_resp_new'>Type : </label>		
              		<select name='type_resp_new' id='type_resp_new'>
                			<option value='Femme'>Femme</option>
                    		<option value='Homme'>Homme</option>
           		    </select></br>
+=======
+    				<label for='pre_resp_new'>Prenom : </label>		
+  					<select name='type_resp_new' id='type_resp_new' required>
+						<option value='Homme'>Homme</option>
+						<option value='Femme'>Femme</option>
+					</select></br>
+>>>>>>> TG
 					<label for='adr_resp_new'>Adresse : </label>
 					<input type='text' name='adr_resp_new' placeholder='necessaire' required /></br>
 					
