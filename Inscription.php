@@ -151,7 +151,7 @@ class inscription{
 	}
 	
 	if (isset($this->no_unite)){
-			$insert->bindParam('::no_unite',$this->:no_unite);
+			$insert->bindParam('::no_unite',$this->no_unite);
 	}else{
 			$insert->bindParam('::no_unite',"null",PDO::PARAM_STR);
 	}
@@ -220,7 +220,7 @@ class inscription{
 	}
 	
 	if (isset($this->no_unite)){
-			$insert->bindParam('::no_unite',$this->:no_unite);
+			$insert->bindParam('::no_unite',$this->no_unite);
 	}else{
 			$insert->bindParam('::no_unite',"null",PDO::PARAM_STR);
 	}

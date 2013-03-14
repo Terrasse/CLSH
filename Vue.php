@@ -58,24 +58,28 @@ class Vue {
     			</br>
     				<label for='nom_resp_new'>Nom :</label>
     				<input type='text' name='nom_resp_new' placeholder='necessaire' required/></br>
-    				<label for='type_resp_new'>Type : </label>
+    				
+    				<label for='pre_resp_new'>Prenom : </label>
     				<input type='text' name='pre_resp_new' placeholder='necessaire' required/></br>
-    				<label for='pre_resp_new'>Prenom : </label>		
-  					<select name='type_resp_new' id='type_resp_new required>
-						<option value='Homme'>Homme</option>
-						<option value='Femme'>Femme</option>
-					</select></br>
+    				<label for='type_resp_new'>Type : </label>		
+             		<select name='type_resp_new' id='type_resp_new'>
+               			<option value='Femme'>Femme</option>
+                   		<option value='Homme'>Homme</option>
+          		    </select></br>
 					<label for='adr_resp_new'>Adresse : </label>
 					<input type='text' name='adr_resp_new' placeholder='necessaire' required /></br>
+					
 					<label for='en_ville_new'>Ville : </label>
 					<input type='text' name='en_ville_new' placeholder='necessaire' required /></br>
 					
-					<input type='text' name='tel_resp_new' placeholder='necessaire' required /></br><label for='tel_resp_new'>Téléphone : </label>
-				
+					<label for='tel_resp_new'>Téléphone : </label>
+					<input type='text' name='tel_resp_new' placeholder='necessaire' required /></br>
 					
-					<input type='text' name='numalloc_caf_resp_new' /></br><label for='numalloc_caf_resp_new'>Numero d'allocataire : </label>
-					<label for='bons_vac_new'>Code promotionnel : </label><input type='text' name='bons_vac_new'/></br>
-					
+					<label for='numalloc_caf_resp_new'>Numero d'allocataire : </label>
+					<input type='text' name='numalloc_caf_resp_new' /></br>
+		
+					<label for='bons_vac_new'>Code promotionnel : </label>
+					<input type='text' name='bons_vac_new'/></br>
     				<input type='submit' value='Valider'/>
 			</p>
 		</form>";
