@@ -278,9 +278,9 @@ public static function findByNum($num) {
 	*/
 	if ($d !== false){
    		$obj = new Famille();
-    	$obj->setAttr('no_fam', $d->no_fam);
-    	$obj->setAttr('nom_resp', strip_tags($d->nom_resp));
-    	$obj->setAttr('pre_resp', strip_tags($d->pre_resp));
+    	$obj->setAttr('NO_FAM', $d->no_fam);
+    	$obj->setAttr('NOM_RESP', strip_tags($d->nom_resp));
+    	$obj->setAttr('PRE_RESP', strip_tags($d->pre_resp));
     	return $obj;
     }else{
     	return false;
