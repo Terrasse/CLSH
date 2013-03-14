@@ -11,10 +11,11 @@
 
 class Offre {
 
-	private $no_unite;
-	private $sem_sej;
-	private $nb_places_offertes;
-	private $nb_places_occupees;
+	private $en_ville;
+	private $code_gf;
+	private $bons_vac;
+	private $alloc_caf;
+	private $tarif_jour;
 
 	public function __construct() {
 		// rien à faire
@@ -84,7 +85,7 @@ class Offre {
 	 */
 	public function save() {
 		//si la page possède un id on met à jour
-		if (isset($this -> no_unite) && isset($this -> sem_sej)) {
+		if (isset($this -> en_ville) && isset($this -> code_gf) && isset($this -> bons_vac) && isset($this -> alloc_caf)) {
 			return $this -> update();
 		} else {
 			return $this -> insert();
@@ -103,22 +104,25 @@ class Offre {
 	public function update() {
 
 		if (!isset($this -> $nb_places_occupees)) {
-			throw new Exception(__CLASS__ . ": Nombre de places occupees undefined : cannot update");
+			throw new Exception(__CLASS__ . ": Tarif undefined : cannot update");
 		}
 
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("update Offre set nb_places_occupees=:nb_places_occupees, 
+		$query = $pdo -> prepare("update Offre set tarif_jour=:$tarif_jour, 
 				where no_unite=:no_unite AND sem_sej = :sem_sej");
 
 		//liaison des parametres
-		if (isset($this -> nb_places_occupees))
-			$query -> bindParam(':nb_places_occupees', $this -> nb_places_occupees);
+		if (isset($this -> tarif_jour))
+			$query -> bindParam(':tarif_jour', $this -> tarif_jour);
 		else
-			$query -> bindParam(':nb_places_occupees', "null", PDO::PARAM_STR);
-		$delete -> bindParam(':no_unite', $this -> no_unite);
-		$delete -> bindParam(':sem_sej', $this -> sem_sej);
+			$query -> bindParam(':tarif_jour', "null", PDO::PARAM_STR);
+		$delete -> bindParam(':en_ville', $this -> en_ville);
+		$delete -> bindParam(':code_gf', $this -> code_gf);
+		$delete -> bindParam(':bons_vac', $this -> bons_vac);
+		$delete -> bindParam(':alloc_caf', $this -> alloc_caf);
+		
 		//lancement de la requete prépar
 		$nb = $query -> execute();
 
@@ -137,9 +141,11 @@ class Offre {
 		$pdo = Base::getConnection();
 
 		if (isset($this -> no_unite) && isset($this -> sem_sej)) {
-			$delete = $pdo -> prepare("DELETE FROM Offre WHERE no_unite = :no_unite AND sem_sej = :sem_sej");
-			$delete -> bindParam(':no_unite', $this -> no_unite);
-			$delete -> bindParam(':sem_sej', $this -> sem_sej);
+			$delete = $pdo -> prepare("DELETE FROM Offre WHERE en_ville = :en_ville AND code_gf = :code_gf AND bons_vac = :bons_vac AND alloc_caf = :alloc_caf");
+			$delete -> bindParam(':en_ville', $this -> en_ville);
+			$delete -> bindParam(':code_gf', $this -> code_gf);
+			$delete -> bindParam(':bons_vac', $this -> bons_vac);
+			$delete -> bindParam(':alloc_caf', $this -> alloc_caf);
 			$nb = $delete -> execute();
 		} else {
 			$nb = '0';
@@ -159,30 +165,36 @@ class Offre {
 	public function insert() {
 
 		$pdo = Base::getConnection();
-		$insert = $pdo -> prepare("INSERT INTO Offre VALUES (:no_unite, :sem_sej, :nb_places_offertes, :nb_places_occupees)");
+		$insert = $pdo -> prepare("INSERT INTO Offre VALUES (:en_ville, :code_gf, :bons_vac, :alloc_caf, :tarif_jour)");
 
-		if (isset($this -> no_unite)) {
-			$insert -> bindParam(':no_unite', $this -> no_unite);
+		if (isset($this -> en_ville)) {
+			$insert -> bindParam(':en_ville', $this -> en_ville);
 		} else {
-			$insert -> bindParam(':no_unite', "null", PDO::PARAM_STR);
+			$insert -> bindParam(':en_ville', "null", PDO::PARAM_STR);
 		}
 
-		if (isset($this -> sem_sej)) {
-			$insert -> bindParam(':sem_sej', $this -> sem_sej);
+		if (isset($this -> code_gf)) {
+			$insert -> bindParam(':code_gf', $this -> code_gf);
 		} else {
-			$insert -> bindParam(':sem_sej', "null", PDO::PARAM_STR);
+			$insert -> bindParam(':code_gf', "null", PDO::PARAM_STR);
 		}
 
-		if (isset($this -> nb_places_offertes)) {
-			$insert -> bindParam(':nb_places_offertes', $this -> nb_places_offertes);
+		if (isset($this -> bons_vac)) {
+			$insert -> bindParam(':bons_vac', $this -> bons_vac);
 		} else {
-			$insert -> bindParam(':nb_places_offertes', "null", PDO::PARAM_STR);
+			$insert -> bindParam(':bons_vac', "null", PDO::PARAM_STR);
 		}
 
-		if (isset($this -> nb_places_occupees)) {
-			$insert -> bindParam(':nb_places_occupees', $this -> nb_places_occupees);
+		if (isset($this -> alloc_caf)) {
+			$insert -> bindParam(':alloc_caf', $this -> alloc_caf);
 		} else {
-			$insert -> bindParam(':nb_places_occupees', "null", PDO::PARAM_STR);
+			$insert -> bindParam(':alloc_caf', "null", PDO::PARAM_STR);
+		}
+		
+		if (isset($this -> tarif_jour)) {
+			$insert -> bindParam(':tarif_jour', $this -> tarif_jour);
+		} else {
+			$insert -> bindParam(':tarif_jour', "null", PDO::PARAM_STR);
 		}
 
 		$nb = $insert -> execute();
@@ -265,6 +277,13 @@ class Offre {
 
 	public static function findAll() {
 
+		/**
+		 *    A ECRIRE ENTIEREMENT
+		 *    SELECTIONNE TOUTES LES LIGNES DE LA TABLE
+		 *    ET LES RETOURNE SOUS LA FORME D'UN TABLEAU D'OBJETS
+		 *
+		 *
+		 */
 
 		$pdo = Base::getConnection();
 		$query = "SELECT * FROM Offre";
