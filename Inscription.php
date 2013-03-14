@@ -353,7 +353,7 @@ public static function findByEnf($id) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM Inscription";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           

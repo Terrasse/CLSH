@@ -275,7 +275,7 @@ public static function findBySite($id) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM PTAccueil";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           

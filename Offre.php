@@ -225,18 +225,15 @@ public static function findByUnite($id) {
 	
 	$dbres = $query->execute();
 	
-	$d=$query->fetch(PDO::FETCH_OBJ) ;
+	$t=$query->fetch(PDO::FETCH_ASSOC) ;
 
-	/**
-	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
-	*   OBJET INSTANCE DE LA CLASSE Page
-	*
-	*/
-	if ($d !== false){
-    	return Offre::creerObjet($d);
-    }else{
-    	return false;
-    }
+	$tab = array();
+          
+     foreach ($t as $tfact){
+     	$tab[]=Offre::creerObjet($t);
+     }
+     
+     return $tab;
 }
 
 /**
@@ -257,20 +254,15 @@ public static function findBySem($id) {
 	//echo $query;
 	$dbres = $query->execute();
 	
-	$d = $query->fetch(PDO::FETCH_OBJ) ;
-	
-	
-	/**
-	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
-	*   OBJET INSTANCE DE LA CLASSE Page
-	*
-	*/
+	$t = $query->fetch(PDO::FETCH_ASSOC) ;
       
-    if ($d !== false){
-    	return Offre::creerObjet($d);
-    }else{
-    	return false;
-    }
+    $tab = array();
+          
+     foreach ($t as $tfact){
+     	$tab[]=Offre::creerObjet($t);
+     }
+     
+     return $tab;
 
 }
 
@@ -298,7 +290,7 @@ public static function findBySem($id) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM Offre";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           

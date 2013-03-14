@@ -254,7 +254,7 @@ public static function findByNum($num) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM Semaine";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           
