@@ -206,7 +206,7 @@ class Offre {
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("SELECT * FROM offre WHERE no_unite=:id");
+		$query = $pdo -> prepare("SELECT * FROM Offre WHERE no_unite=:id");
 		$query -> bindParam(':id', $id);
 
 		$dbres = $query -> execute();
