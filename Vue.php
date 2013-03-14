@@ -28,18 +28,24 @@ class Vue {
 	// les methodes suivantes gèrent le contenu de l'affichage des Sites
 	
 	public function getStatusSite(){
-		return "Selectionnez le site où vous souhaitez inscrire votre enfant";
+		return "Page de selection du Site";
 	}
 	
 	public function getContenuSite(){
 		$resultat="
 			<form method='post' action='index.php?action=disponibilite'>
 		   		<p>
-		    		<label for='site_sel'>Dans quel pays habitez-vous ?</label><br />";
-			foreach ($currentSite as $key => $value) {
-				
+		   		<label for='no_site_sel'>Selectionnez le site où vous souhaitez inscrire votre enfant</label></br>	
+		   		<select name='no_site_sel' id='no_site_sel'>";
+			foreach ($this->pages as $key => $value) {
+				 $resultat.="<option value='".$value->getAttr('no_site')."'>".$value->getAttr('nom_site')."</option>";	
 			}
-		
+		$resultat.="
+				</select>
+				</p>
+		   		<input type='submit' value='Valider'/>
+			</form>";
+		return $resultat;
 	}
 	
 	// les methodes suivantes gèrent le contenu de l'affichage des Unites
@@ -79,7 +85,8 @@ class Vue {
 
 		return "
 		<a href='index.php?action=famille&id=1'>afficher la famille n°1</a><br>
-		<a href='index.php?action=famille&id=2'>afficher la famille n°2</a> 
+		<a href='index.php?action=famille&id=2'>afficher la famille n°2</a><br> 
+		<a href='index.php?action=site'>afficher ecran selection site</a> 
 		";
 	}
 

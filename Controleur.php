@@ -2,6 +2,7 @@
 require_once ('Vue.php');
 require_once ('Inscription.php');
 require_once ('Famille.php');
+require_once ('Site.php');
 class Controleur {
 	private static $fonctionAutorise = array('site'=>'constuirePageSite','unite' => 'contruirePageUnite','test'=>'contruirePageTest','famille'=>'contruirePageFamille');
 	public function analyseURL() {

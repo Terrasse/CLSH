@@ -9,7 +9,7 @@
  *  @package ACSI
  */
  
-class site{
+class Site{
 
  
   private $no_site;
@@ -267,20 +267,16 @@ public static function findByNom($nom) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM site";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
-          
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC);   
      $tab = array();
-          
      foreach ($t as $tfact){
-     	$tab[]=site::creerObjet($t);
+     	$tab[]=Site::creerObjet($tfact);
      }
-     
      return $tab;
-	 
     }
     
      public static function creerObjet($tab){
-		$obj = new site();
+		$obj = new Site();
     	$obj->setAttr('no_site', $tab['NO_SITE']);
 		$obj->setAttr('nom_site', $tab['NOM_SITE']);
 		return $obj;
