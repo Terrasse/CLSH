@@ -324,14 +324,6 @@ public static function findByNom($nom) {
     
     public static function findAll() {
 
-    /**
-     *    A ECRIRE ENTIEREMENT
-     *    SELECTIONNE TOUTES LES LIGNES DE LA TABLE
-     *    ET LES RETOURNE SOUS LA FORME D'UN TABLEAU D'OBJETS
-     *
-     *
-     */
-     
      $pdo = Base::getConnection();
      $query = "SELECT * FROM enfant";
      $dbres = $pdo->query($query);
@@ -342,6 +334,39 @@ public static function findByNom($nom) {
      foreach ($t as $tenf){
      	$obj = new Enfant();
     	$obj->setAttr('numero', $d->numero);
+    	$obj->setAttr('nom', strip_tags($d->nom));
+    	$obj->setAttr('prenom', strip_tags($d->prenom));
+     	$tab[]=$obj;
+     }
+     
+     return $tab;
+	 
+    }
+    
+    /**
+     *   Finder AllbyFamille
+     *
+     *   Renvoie toutes les lignes de la table Page
+     *   sous la forme d'un tableau d'objets
+     *  
+     *   @static
+     *   @return Array renvoie un tableau de Page
+     */
+    
+    public static function findAllByFam($id_fam) {
+
+     $pdo = Base::getConnection();
+     $query = "SELECT * FROM enfant WHERE no_fam=:id_fam";
+     $query->bindParam(":id_fam",$id_fam);
+     $dbres = $pdo->query($query);
+     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+          
+     $tab = array();
+          
+     foreach ($t as $tenf){
+     	$obj = new Enfant();
+    	$obj->setAttr('no_enf', $d->numero);
+    	$obj->setAttr('no_fam', $d->numero_famille);
     	$obj->setAttr('nom', strip_tags($d->nom));
     	$obj->setAttr('prenom', strip_tags($d->prenom));
      	$tab[]=$obj;
