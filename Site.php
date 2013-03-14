@@ -263,14 +263,6 @@ public static function findByNom($nom) {
      */
     
     public static function findAll() {
-
-    /**
-     *    A ECRIRE ENTIEREMENT
-     *    SELECTIONNE TOUTES LES LIGNES DE LA TABLE
-     *    ET LES RETOURNE SOUS LA FORME D'UN TABLEAU D'OBJETS
-     *
-     *
-     */
      
      $pdo = Base::getConnection();
      $query = "SELECT * FROM site";
