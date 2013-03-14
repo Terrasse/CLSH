@@ -10,7 +10,6 @@ class Vue {
 	public function affiche($selecteur) {
 		if (!isset($selected)) {
 			if (array_key_exists($selecteur, self::$contenuAutorise)) {
-				var_dump(self::$contenuAutorise[$selecteur]['contenu']);
 				$fonctionPage = self::$contenuAutorise[$selecteur]['contenu'];
 				$fonctionStatus = self::$contenuAutorise[$selecteur]['status'];
 				$contenuPage=$this->$fonctionPage();
@@ -52,7 +51,8 @@ class Vue {
 	}
 	
 	private function getContenuFamille(){
-		return "CONTENU EN CONTRUCTION";
+		
+		return var_dump($this->pages);
 	}
 	
 	/** 
