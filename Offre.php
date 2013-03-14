@@ -265,7 +265,6 @@ class Offre {
 
 	public static function findAll() {
 
-
 		$pdo = Base::getConnection();
 		$query = "SELECT * FROM Offre";
 		$dbres = $pdo -> query($query);
