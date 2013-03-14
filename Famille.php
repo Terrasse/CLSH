@@ -336,7 +336,7 @@ public static function findByNom($nom) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM Famille";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           

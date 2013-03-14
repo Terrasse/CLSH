@@ -307,7 +307,7 @@ public static function findByNom($nom) {
      $pdo = Base::getConnection();
      $query = "SELECT * FROM enfant";
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           
@@ -335,7 +335,7 @@ public static function findByNom($nom) {
      $query = "SELECT * FROM enfant WHERE no_fam=:id_fam";
      $query->bindParam(":id_fam",$id_fam);
      $dbres = $pdo->query($query);
-     $t = $dbres->fetchAll(PDO::FETCH_OBJ) ;
+     $t = $dbres->fetchAll(PDO::FETCH_ASSOC) ;
           
      $tab = array();
           
