@@ -1,15 +1,15 @@
 <?php
 
 /**
- *  La classe Offre
+ *  La classe Tarif
  *
- *  La Classe Offre  realise un Active Record sur la table Offre
+ *  La Classe Tarif  realise un Active Record sur la table Tarif
  *  À TERMINER !!!!!!!!!!!!!!!!!
  *
  *  @package ACSI
  */
 
-class Offre {
+class Tarif {
 
 	private $en_ville;
 	private $code_gf;
@@ -110,7 +110,7 @@ class Offre {
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("update Offre set tarif_jour=:$tarif_jour, 
+		$query = $pdo -> prepare("update Tarif set tarif_jour=:$tarif_jour, 
 				where no_unite=:no_unite AND sem_sej = :sem_sej");
 
 		//liaison des parametres
@@ -141,7 +141,7 @@ class Offre {
 		$pdo = Base::getConnection();
 
 		if (isset($this -> no_unite) && isset($this -> sem_sej)) {
-			$delete = $pdo -> prepare("DELETE FROM Offre WHERE en_ville = :en_ville AND code_gf = :code_gf AND bons_vac = :bons_vac AND alloc_caf = :alloc_caf");
+			$delete = $pdo -> prepare("DELETE FROM Tarif WHERE en_ville = :en_ville AND code_gf = :code_gf AND bons_vac = :bons_vac AND alloc_caf = :alloc_caf");
 			$delete -> bindParam(':en_ville', $this -> en_ville);
 			$delete -> bindParam(':code_gf', $this -> code_gf);
 			$delete -> bindParam(':bons_vac', $this -> bons_vac);
@@ -165,7 +165,7 @@ class Offre {
 	public function insert() {
 
 		$pdo = Base::getConnection();
-		$insert = $pdo -> prepare("INSERT INTO Offre VALUES (:en_ville, :code_gf, :bons_vac, :alloc_caf, :tarif_jour)");
+		$insert = $pdo -> prepare("INSERT INTO Tarif VALUES (:en_ville, :code_gf, :bons_vac, :alloc_caf, :tarif_jour)");
 
 		if (isset($this -> en_ville)) {
 			$insert -> bindParam(':en_ville', $this -> en_ville);
@@ -219,7 +219,7 @@ class Offre {
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("SELECT * FROM offre WHERE no_unite=:id");
+		$query = $pdo -> prepare("SELECT * FROM Tarif WHERE no_unite=:id");
 		$query -> bindParam(':id', $id);
 
 		$dbres = $query -> execute();
@@ -229,7 +229,7 @@ class Offre {
 		$tab = array();
 		var_dump($t);
 		foreach ($t as $tfact) {
-			$tab[] = Offre::creerObjet($tfact);
+			$tab[] = Tarif::creerObjet($tfact);
 		}
 
 		return $tab;
@@ -248,7 +248,7 @@ class Offre {
 	public static function findBySem($id) {
 
 		$pdo = Base::getConnection();
-		$query = $pdo -> prepare("SELECT * FROM Offre WHERE sem_sej=:id");
+		$query = $pdo -> prepare("SELECT * FROM Tarif WHERE sem_sej=:id");
 		$query -> bindParam(":id", $id);
 		//echo $query;
 		$dbres = $query -> execute();
@@ -258,7 +258,7 @@ class Offre {
 		$tab = array();
 
 		foreach ($t as $tfact) {
-			$tab[] = Offre::creerObjet($t);
+			$tab[] = Tarif::creerObjet($t);
 		}
 
 		return $tab;
@@ -286,14 +286,14 @@ class Offre {
 		 */
 
 		$pdo = Base::getConnection();
-		$query = "SELECT * FROM Offre";
+		$query = "SELECT * FROM Tarif";
 		$dbres = $pdo -> query($query);
 		$t = $dbres -> fetchAll(PDO::FETCH_ASSOC);
 
 		$tab = array();
 
 		foreach ($t as $tfact) {
-			$tab[] = Offre::creerObjet($t);
+			$tab[] = Tarif::creerObjet($t);
 		}
 
 		return $tab;
@@ -301,7 +301,7 @@ class Offre {
 	}
 
 	public static function creerObjet($tab) {
-		$obj = new Offre();
+		$obj = new Tarif();
 		$obj -> setAttr('no_unite', $tab['NO_UNITE']);
 		$obj -> setAttr('sem_sej', $tab['SEM_SEJ']);
 		$obj -> setAttr('nb_places_offertes', $tab['NB_PLACES_OFFERTES']);
