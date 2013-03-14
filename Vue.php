@@ -1,7 +1,7 @@
 <?php
 class Vue {
 	private $pages;
-	private static $contenuAutorise = array('famille'=>array ('status'=>'getStatusFamille','contenu'=>'getContenuFamille'),'listetest'=>array('status'=>'getStatusTest','contenu'=>'getContenuTest'));
+	private static $contenuAutorise = array('disponibilite'=>array('status'=>'getStatusDisponibilite','contenu'=>'getContenuDisponibilite'),'famille' => array('status' => 'getStatusFamille', 'contenu' => 'getContenuFamille'), 'listetest' => array('status' => 'getStatusTest', 'contenu' => 'getContenuTest'));
 
 	public function __construct($page) {
 		$this -> pages = $page;
@@ -12,9 +12,9 @@ class Vue {
 			if (array_key_exists($selecteur, self::$contenuAutorise)) {
 				$fonctionPage = self::$contenuAutorise[$selecteur]['contenu'];
 				$fonctionStatus = self::$contenuAutorise[$selecteur]['status'];
-				$contenuPage=$this->$fonctionPage();
-				$contenuStatus=$this->$fonctionStatus();
-				return $this -> afficheGeneral($contenuPage,$contenuStatus);
+				$contenuPage = $this -> $fonctionPage();
+				$contenuStatus = $this -> $fonctionStatus();
+				return $this -> afficheGeneral($contenuPage, $contenuStatus);
 			} else
 				printf("en contruction");
 			//TODO gererer les erreurs
@@ -26,34 +26,45 @@ class Vue {
 		$resultat = "en contruction";
 		return $resultat;
 	}
-	// les methodes suivantes gèrent le contenu de l'affichage des TESTs
 	
-	private function getStatusTest(){
+	// les methodes suivantes gèrent le contenu de l'affichage de disponibilités
+	
+	private function getStatusDisponibilite(){
+		return "en Construction";
+	}
+	
+	private function getContenuDisponibilite(){
+		return "en Construction";
+	}
+	
+
+	// les methodes suivantes gèrent le contenu de l'affichage des TESTs
+
+	private function getStatusTest() {
 		return "Affichage de la page de test";
 	}
-	
-	private function getContenuTest(){
-		
+
+	private function getContenuTest() {
+
 		return "
 		<a href='index.php?action=famille&id=1'>afficher la famille n°1</a><br>
-		<a href='index.php?action=famille&id=2'>afficher la famille n°1</a> 
+		<a href='index.php?action=famille&id=2'>afficher la famille n°2</a> 
 		";
 	}
-	
-	
+
 	// les methodes suivantes gèrent le contenu de l'affichage des familles
-	
+
 	/**
 	 * Methode permettant de generer le fragement status de la page Famille
 	 */
-	private function getStatusFamille(){
-	 	return "STATUS EN CONSTRUCTION !";
+	private function getStatusFamille() {
+		return "STATUS EN CONSTRUCTION !";
 	}
-	
-	private function getContenuFamille(){
-		if($this->pages->getAttr('no_fam')==null){
-		return "
- 		<form action='wiki.php?action=famille&type=create' method='post'>
+
+	private function getContenuFamille() {
+		if ($this -> pages -> getAttr('no_fam') == '') {
+			return "
+ 		<form action='index.php?action=save&type=create' method='post'>
 			<p>Information sur le responsable : <br>
     			</br>
     				<label for='nom_resp_new'>Nom :</label>
@@ -61,19 +72,11 @@ class Vue {
     				
     				<label for='pre_resp_new'>Prenom : </label>
     				<input type='text' name='pre_resp_new' placeholder='necessaire' required/></br>
-<<<<<<< HEAD
     				<label for='type_resp_new'>Type : </label>		
              		<select name='type_resp_new' id='type_resp_new'>
                			<option value='Femme'>Femme</option>
                    		<option value='Homme'>Homme</option>
           		    </select></br>
-=======
-    				<label for='pre_resp_new'>Prenom : </label>		
-  					<select name='type_resp_new' id='type_resp_new' required>
-						<option value='Homme'>Homme</option>
-						<option value='Femme'>Femme</option>
-					</select></br>
->>>>>>> TG
 					<label for='adr_resp_new'>Adresse : </label>
 					<input type='text' name='adr_resp_new' placeholder='necessaire' required /></br>
 					
@@ -91,49 +94,43 @@ class Vue {
     				<input type='submit' value='Valider'/>
 			</p>
 		</form>";
-		}else{
-			var_dump($this->pages);
-		return "
- 		<form action='wiki.php?action=famille&type=edit' method='post'>
+		} else {
+			return "
+ 		<form action='index.php?action=famille&type=edit' method='post'>
 			<p>Information sur le responsable : <br>
     			</br>
     				<label for='nom_resp_new'>Nom :</label>
-    				<input type='text' name='nom_resp_new' value='.$this->pages->getAttr('no_fam').' placeholder='necessaire' required/></br>
+    				<input type='text' name='nom_resp_new' value='" . $this -> pages -> getAttr('nom_resp') . "' placeholder='necessaire' required/></br>
     				
     				<label for='pre_resp_new'>Prenom : </label>
-    				<input type='text' name='pre_resp_new' placeholder='necessaire' required/></br>
-    				<label for='type_resp_new'>Type : </label>		
-             		<select name='type_resp_new' id='type_resp_new'>
-               			<option value='Femme'>Femme</option>
-                   		<option value='Homme'>Homme</option>
-          		    </select></br>
+    				<input type='text' name='pre_resp_new' value='" . $this -> pages -> getAttr('pre_resp') . "' placeholder='necessaire' required/></br>
+    				<label for='type_resp_new'>Lien de parente : </label>		
+					<input type='text' name='type_resp_new' value='" . $this -> pages -> getAttr('type_resp') . "' placeholder='necessaire' required/></br>
 					<label for='adr_resp_new'>Adresse : </label>
-					<input type='text' name='adr_resp_new' placeholder='necessaire' required /></br>
+					<input type='text' name='adr_resp_new' value='" . $this -> pages -> getAttr('adr_resp') . "' placeholder='necessaire' required /></br>
 					
 					<label for='en_ville_new'>Ville : </label>
-					<input type='text' name='en_ville_new' placeholder='necessaire' required /></br>
+					<input type='text' name='en_ville_new' value='" . $this -> pages -> getAttr('en_ville') . "' placeholder='necessaire' required /></br>
 					
 					<label for='tel_resp_new'>Téléphone : </label>
-					<input type='text' name='tel_resp_new' placeholder='necessaire' required /></br>
+					<input type='tel' name='tel_resp_new' value='" . $this -> pages -> getAttr('tel_resp') . "' placeholder='necessaire' required /></br>
 					
 					<label for='numalloc_caf_resp_new'>Numero d'allocataire : </label>
-					<input type='text' name='numalloc_caf_resp_new' /></br>
+					<input type='text' value='" . $this -> pages -> getAttr('numalloc_caf_resp') . "' name='numalloc_caf_resp_new' /></br>
 		
 					<label for='bons_vac_new'>Code promotionnel : </label>
-					<input type='text' name='bons_vac_new'/></br>
+					<input type='text' value='" . $this -> pages -> getAttr('bons_vac_new') . "' name='bons_vac_new'/></br>
     				<input type='submit' value='Valider'/>
 			</p>
 		</form>";
 		}
-		
 
 	}
-	
-	/** 
+
+	/**
 	 * Methode permettant de genèrer le contenu de la page Famille
 	 */
-	 
-	
+
 	/**
 	 * Methode permettant d'encapuler le contenu dynamic dans le contenu static
 	 */
