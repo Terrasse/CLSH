@@ -1,16 +1,7 @@
 <?php
 class Vue {
 	private $pages;
-	private static $contenuAutorise = array(
-		 		'edit' => 'aff_edit',
-		 		'create' => 'aff_create',
-		 		'save' => 'aff_save',
-		 		'preview' => 'aff_preview',
-		 		'get' => 'aff_get',
-		 		'getall' => 'aff_getall',
-		 		'delete' => 'aff_delete',
-		 		'index' => 'aff_index',
-		 		'error' => 'aff_error');
+	private static $contenuAutorise = array('famille'=>array ('status'=>'getStatusFamille','contenu'=>'getContenuFamille'),'listetest'=>array('status'=>'getStatusTest','contenu'=>'getContenuTest'));
 
 	public function __construct($page) {
 		$this -> pages = $page;
@@ -19,10 +10,12 @@ class Vue {
 	public function affiche($selecteur) {
 		if (!isset($selected)) {
 			if (array_key_exists($selecteur, self::$contenuAutorise)) {
-				$contenu = self::$contenuAutorise[$selecteur];
-				$methode = $contenu["methode"];
-				$contenuPage = $this -> $methode();
-				return $this -> afficheGeneral($contenuPage, $contenu["status"]);
+				var_dump(self::$contenuAutorise[$selecteur]['contenu']);
+				$fonctionPage = self::$contenuAutorise[$selecteur]['contenu'];
+				$fonctionStatus = self::$contenuAutorise[$selecteur]['status'];
+				$contenuPage=$this->$fonctionPage();
+				$contenuStatus=$this->$fonctionStatus();
+				return $this -> afficheGeneral($contenuPage,$contenuStatus);
 			} else
 				printf("en contruction");
 			//TODO gererer les erreurs
@@ -34,7 +27,39 @@ class Vue {
 		$resultat = "en contruction";
 		return $resultat;
 	}
-
+	// les methodes suivantes gèrent le contenu de l'affichage des TESTs
+	
+	private function getStatusTest(){
+		return "Affichage de la page de test";
+	}
+	
+	private function getContenuTest(){
+		
+		return "
+		<a href='index.php?action=famille&id=1'>afficher la famille n°1</a><br>
+		<a href='index.php?action=famille&id=2'>afficher la famille n°1</a> 
+		";
+	}
+	
+	
+	// les methodes suivantes gèrent le contenu de l'affichage des familles
+	
+	/**
+	 * Methode permettant de generer le fragement status de la page Famille
+	 */
+	private function getStatusFamille(){
+	 	return "STATUS EN CONSTRUCTION !";
+	}
+	
+	private function getContenuFamille(){
+		return "CONTENU EN CONTRUCTION";
+	}
+	
+	/** 
+	 * Methode permettant de genèrer le contenu de la page Famille
+	 */
+	 
+	
 	/**
 	 * Methode permettant d'encapuler le contenu dynamic dans le contenu static
 	 */
@@ -44,7 +69,6 @@ class Vue {
 <html>
 	<body>
 		<div class='container'>\n";
-		$fragmenthtml .= $this -> fragmentConnexion();
 		$fragmenthtml .= $this -> fragmentHead();
 		$fragmenthtml .= $this -> fragmentHeader();
 		$fragmenthtml .= $this -> fragmentStatus($status);
@@ -83,35 +107,6 @@ class Vue {
 				<meta charset='utf-8'/>
 				<link rel='stylesheet' href='style.css' />
 			</head>";
-	}
-
-	/**
-	 * Methode qui permet de générer le connect
-	 * 	celui-ci est un contenu commun à toutes les pages
-	 */
-
-	private function fragmentConnexion() {
-		$contenu .= "
-			<div class='connect'>";
-		if (isset($_SESSION['user_id'])) {
-			$contenu .= "
-				<p> Vous êtes connecté en tant que " . $_SESSION['user_id'] . "(<a href='wiki.php?action=user&title=deconnexion'>)</p>
-			";
-		} else {
-			$contenu .= "
-				<form action='wiki.php?action=user&title=connexion' method='post'>
-					<p>
-						<label for='user_id'><a href='wiki.php?action=user&title=enregistrement'>S'enregistrer</a> / Connexion : </label>
-	    				<input type='email' name='user_id' placeholder='e-mail' required/>
-						<input type='password' name='user_password' placeholder='mot de passe'/>
-	    				<input type='submit' value='Valider' required */>
-					</p>
-				</form>
-			";
-		}
-		$contenu .= "
-			</div>";
-		return $contenu;
 	}
 
 	/**
