@@ -3,7 +3,7 @@ require_once ('Vue.php');
 require_once ('Inscription.php');
 require_once ('Famille.php');
 class Controleur {
-	private static $fonctionAutorise = array('unite' => 'contruirePageUnite','test'=>'contruirePageTest','famille'=>'contruirePageFamille');
+	private static $fonctionAutorise = array('site'=>'constuirePageSite','unite' => 'contruirePageUnite','test'=>'contruirePageTest','famille'=>'contruirePageFamille');
 	public function analyseURL() {
 				//TODO faire un tableau + function pour chaque page
 		if (count($_REQUEST) != 0) {
@@ -18,6 +18,12 @@ class Controleur {
 			$methode = self::$fonctionAutorise['test'];
 			$this -> $methode();
 		}
+	}
+	
+	public function constuirePageSite(){
+		$page=Site::findAll();
+		$vue = new Vue($page);
+		echo $vue -> affiche("site");
 	}
 
 	public function contruirePageUnite() {

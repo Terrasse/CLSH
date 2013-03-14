@@ -1,7 +1,11 @@
 <?php
 class Vue {
 	private $pages;
-	private static $contenuAutorise = array('disponibilite'=>array('status'=>'getStatusDisponibilite','contenu'=>'getContenuDisponibilite'),'famille' => array('status' => 'getStatusFamille', 'contenu' => 'getContenuFamille'), 'listetest' => array('status' => 'getStatusTest', 'contenu' => 'getContenuTest'));
+	private static $contenuAutorise = array('site'=>array('status'=>'getStatusSite','contenu'=>'getContenuSite'),
+											'disponibilite'=>array('status'=>'getStatusDisponibilite','contenu'=>'getContenuDisponibilite'),
+											'famille'=>array('status' => 'getStatusFamille','contenu' =>'getContenuFamille'),
+											'listetest'=>array('status' => 'getStatusTest', 'contenu' => 'getContenuTest')
+											);
 
 	public function __construct($page) {
 		$this -> pages = $page;
@@ -21,9 +25,36 @@ class Vue {
 		} else
 			printf("en contruction");
 	}
-
+	// les methodes suivantes gèrent le contenu de l'affichage des Sites
+	
+	public function getStatusSite(){
+		return "Selectionnez le site où vous souhaitez inscrire votre enfant";
+	}
+	
+	public function getContenuSite(){
+		$resultat="
+			<form method='post' action='index.php?action=disponibilite'>
+		   		<p>
+		    		<label for='site_sel'>Dans quel pays habitez-vous ?</label><br />";
+			foreach ($currentSite as $key => $value) {
+				
+			}
+		
+	}
+	
+	// les methodes suivantes gèrent le contenu de l'affichage des Unites
+	
 	public function getContenuUnite() {
-		$resultat = "en contruction";
+		$resutat="
+		<form method='post' action='index.php?action=disponibilite'>
+		   <p>
+		       <label for='unite'>Dans quel pays habitez-vous ?</label><br />
+		       <select name='pays' id='pays'>
+		           <option value='france'>France</option>
+		           <option value='espagne'>Espagne</option>
+		       </select>
+		   </p>
+		</form>";
 		return $resultat;
 	}
 	
