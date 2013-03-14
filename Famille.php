@@ -351,6 +351,7 @@ public static function findByNom($nom) {
 	
 	public static function creerObjet($tab){
 		$obj = new Famille();
+		var_dump($tab['NO_FAM']);
     	$obj->setAttr('no_fam', $tab['NO_FAM']);
     	$obj->setAttr('nom_resp', $tab['NOM_RESP']);
     	$obj->setAttr('pre_resp', $tab['PRE_RESP']);
