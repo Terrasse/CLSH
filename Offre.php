@@ -294,8 +294,8 @@ class Offre {
 		$obj = new Offre();
 		$obj -> setAttr('no_unite', $tab['NO_UNITE']);
 		$obj -> setAttr('sem_sej', $tab['SEM_SEJ']);
-		$obj -> setAttr('$nb_places_offertes', $tab['NB_PLACES_OFFERTES']);
-		$obj -> setAttr('$nb_places_occupees', $tab['NB_PLACES_OCCUPEES']);
+		$obj -> setAttr('nb_places_offertes', $tab['NB_PLACES_OFFERTES']);
+		$obj -> setAttr('nb_places_occupees', $tab['NB_PLACES_OCCUPEES']);
 		return $obj;
 	}
 
