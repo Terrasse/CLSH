@@ -90,7 +90,7 @@ class Offre{
    */
   public function save() {
 	//si la page possède un id on met à jour
-	if (isset($this->no_unite)){
+	if (isset($this->no_unite) && isset($this->sem_sej)){
 		return $this->update();
 	}else{
 		return $this->insert();
@@ -109,23 +109,24 @@ class Offre{
    */
   public function update() {
     
-	if (!isset($this->sem_sej)) {	
-      throw new Exception(__CLASS__ . ": Semaine de séjour undefined : cannot update");
+	if (!isset($this->$nb_places_occupees)) {	
+      throw new Exception(__CLASS__ . ": Nombre de places occupees undefined : cannot update");
     } 
     
 	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query = $pdo ->prepare("update Offre set sem_sej=:sem_sej, 
-				where no_unite=:no_unite");
+	$query = $pdo ->prepare("update Offre set nb_places_occupees=:$nb_places_occupees, 
+				where no_unite=:no_unite AND sem_sej = :sem_sej");
 				
 	//liaison des parametres
-	if (isset($this->montant_fact))
-			$query->bindParam(':montant_fact',$this->montant_fact);
+	if (isset($this->nb_places_occupees))
+			$query->bindParam(':nb_places_occupees',$this->nb_places_occupees);
 		else
-			$query->bindParam(':montant_fact',"null",PDO::PARAM_STR);
-	$query->bindParam(':no_fact',$this->no_fact);
+			$query->bindParam(':nb_places_occupees',"null",PDO::PARAM_STR);
+	$delete->bindParam(':no_unite',$this->no_unite);
+    $delete->bindParam(':sem_sej',$this->sem_sej);
 	//lancement de la requete prépar	  
     $nb=$query->execute();
     
@@ -144,10 +145,10 @@ class Offre{
     
     $pdo = Base::getConnection();
     
-	if (isset($this->no_fact)){ 
-		$delete = $pdo->prepare("DELETE FROM Offre WHERE no_fact = :no_fact");
-		$delete->bindParam(':no_fact',$this->no_fact);
-     	
+	if (isset($this->no_unite) && isset($this->sem_sej)){ 
+		$delete = $pdo->prepare("DELETE FROM Offre WHERE no_unite = :no_unite AND sem_sej = :sem_sej");
+		$delete->bindParam(':no_unite',$this->no_unite);
+     	$delete->bindParam(':sem_sej',$this->sem_sej);
      	$nb = $delete->execute();  
 	 }else{
 	 	$nb = '0';
@@ -168,25 +169,36 @@ class Offre{
   public function insert() {
 
    	$pdo = Base::getConnection();
-    $insert = $pdo->prepare("INSERT INTO Offre VALUES (null, :date_fact, :montant_fact, :mode_paiement)");
+    $insert = $pdo->prepare("INSERT INTO Offre VALUES (:no_unite, :sem_sej, :nb_places_offertes, :nb_places_occupees)");
     
-    if (isset($this->montant_fact)){
-			$insert->bindParam(':montant_fact',$this->montant_fact);
+    if (isset($this->no_unite)){
+			$insert->bindParam(':no_unite',$this->no_unite);
 	}else{
-			$insert->bindParam(':montant_fact',"null",PDO::PARAM_STR);
+			$insert->bindParam(':no_unite',"null",PDO::PARAM_STR);
 	}
     
-    if (isset($this->mode_paiement)){
-			$insert->bindParam(':mode_paiement',$this->mode_paiement);
+    if (isset($this->sem_sej)){
+			$insert->bindParam(':sem_sej',$this->sem_sej);
 	}else{
-			$insert->bindParam(':mode_paiement',"null",PDO::PARAM_STR);
+			$insert->bindParam(':sem_sej',"null",PDO::PARAM_STR);
+	}
+	
+	if (isset($this->$nb_places_offertes)){
+			$insert->bindParam(':$nb_places_offertes',$this->$nb_places_offertes);
+	}else{
+			$insert->bindParam(':$nb_places_offertes',"null",PDO::PARAM_STR);
+	}
+	
+	if (isset($this->$nb_places_occupees)){
+			$insert->bindParam(':$nb_places_occupees',$this->$nb_places_occupees);
+	}else{
+			$insert->bindParam(':$nb_places_occupees',"null",PDO::PARAM_STR);
 	}
 	
 	
 	$insert->bindParam(':date_fact',date("Ymd"),PDO::PARAM_STR);
     
     $nb=$insert->execute();
-    $this->setAttr('no_fact', $pdo->LastInsertId());
 	$this->update();
 	
 	return $nb;
@@ -204,12 +216,12 @@ class Offre{
 	*   @param integer $id OID to find
 	*   @return Page renvoie un objet de type Page
 	*/
-public static function findByNum($num) {
+public static function findByUnite($id) {
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query =$pdo->prepare("SELECT * FROM Offre WHERE no_fact=:num");
-	$query->bindParam(':num',$num);
+	$query =$pdo->prepare("SELECT * FROM Offre WHERE no_unite=:id");
+	$query->bindParam(':id',$id);
 	
 	$dbres = $query->execute();
 	
@@ -237,11 +249,11 @@ public static function findByNum($num) {
 	*   @param integer $id OID to find
 	*   @return Page renvoie un objet de type Page
 	*/
-public static function findByMontant($montant) {
+public static function findBySem($id) {
 
 	$pdo = Base::getConnection();
-	$query = $pdo->prepare("SELECT * FROM Offre WHERE montant_fact=:montant_fact");
-	$query->bindParam(":montant_fact",$montant);
+	$query = $pdo->prepare("SELECT * FROM Offre WHERE sem_sej=:id");
+	$query->bindParam(":id",$id);
 	//echo $query;
 	$dbres = $query->execute();
 	
@@ -300,10 +312,10 @@ public static function findByMontant($montant) {
     
      public static function creerObjet($tab){
 		$obj = new Offre();
-    	$obj->setAttr('no_fact', $tab['NO_FACT']);
-    	$obj->setAttr('date_fact', $tab['DATE_FACT']);
-    	$obj->setAttr('montant_fact', $tab['MONTAN_FACT']);
-		$obj->setAttr('mode_paiement', $tab['MODE_PAIEMENT']);
+    	$obj->setAttr('no_unite', $tab['NO_UNITE']);
+    	$obj->setAttr('sem_sjr', $tab['SEM_SEJ']);
+    	$obj->setAttr('$nb_places_offertes', $tab['NB_PLACES_OFFERTES']);
+		$obj->setAttr('$nb_places_occupees', $tab['NB_PLACES_OCCUPEES']);
 		return $obj;
 	}
     
