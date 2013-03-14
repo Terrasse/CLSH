@@ -205,7 +205,6 @@ class Offre {
 	 *   @return Page renvoie un objet de type Page
 	 */
 	public static function findByUnite($id) {
-		var_dump($id);
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
@@ -217,11 +216,9 @@ class Offre {
 		$t = $query -> fetch(PDO::FETCH_ASSOC);
 
 		$tab = array();
-		var_dump($t);
 		foreach ($t as $tfact) {
 			$tab[] = Offre::creerObjet($tfact);
 		}
-
 		return $tab;
 	}
 

@@ -71,7 +71,27 @@ class Vue {
 	}
 	
 	private function getContenuDisponibilite(){
-		return "en Construction";
+			var_dump($this->pages);
+			$resultat="
+			<form method='post' action='index.php?action=disponibilite'>
+		   		<p>
+		   		Indiquez les périodes pour lequels vous souhaitez inscrire l'enfant ?
+		   		<input type='hidden' name='no_site_sel' value='"+$_POST['no_site_sel']+"'>
+		   	";
+			foreach ($this->pages as $key => $value) {
+				$nbPlaceDispo=$value->getAttr('nb_places_offertes')-$value->getAttr('nb_places_occupees');
+				if($nbPlaceDispo>1){
+					$semaine=Semaine::findByNum($value->getAttr('sem_sej'));
+					$unite=Unite::findByNum($value->getAttr('no_unite'));
+					$resultat.="<input type='checkbox' name='"+$value->getAttr('no_unite_sel')+"' id='"+$value->getAttr('no_unite_sel')+"' /> <label for='"+$value->getAttr('no_unite_sel')+"'>"+$unite->getAttr('nom_unite')+ " du "+$semaine->getAttr('du_sem')+" au "+$semaine->getAttr('au_sem')+" | nombre de place disponible : "+ $nbPlaceDispo +"</label>";
+				}	
+			}
+			var_dump($resultat);
+			$resultat.="
+				<input type='submit' value='Valider'/>
+				</p>
+			</form>";
+		return $resultat;
 	}
 	
 
