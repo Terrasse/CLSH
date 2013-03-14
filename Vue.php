@@ -1,7 +1,16 @@
 <?php
 class Vue {
 	private $pages;
-	private static $contenuAutorise = array("unite" => array("methode" => "getContenuUnite", "status" => "Selectionnez l'unité de l'enfant à inscrire"));
+	private static $contenuAutorise = array(
+		 		'edit' => 'aff_edit',
+		 		'create' => 'aff_create',
+		 		'save' => 'aff_save',
+		 		'preview' => 'aff_preview',
+		 		'get' => 'aff_get',
+		 		'getall' => 'aff_getall',
+		 		'delete' => 'aff_delete',
+		 		'index' => 'aff_index',
+		 		'error' => 'aff_error');
 
 	public function __construct($page) {
 		$this -> pages = $page;
