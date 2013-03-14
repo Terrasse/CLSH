@@ -205,7 +205,7 @@ class Tarif {
 	}
 
 	/**
-	 *   Finder sur ID
+	 *   Finder sur Ville
 	 *
 	 *   Retrouve la ligne de la table correspondant au ID passé en paramètre,
 	 *   retourne un objet
@@ -214,12 +214,12 @@ class Tarif {
 	 *   @param integer $id OID to find
 	 *   @return Page renvoie un objet de type Page
 	 */
-	public static function findByUnite($id) {
+	public static function findByVille($id) {
 		var_dump($id);
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("SELECT * FROM Tarif WHERE no_unite=:id");
+		$query = $pdo -> prepare("SELECT * FROM Tarif WHERE en_ville=:id");
 		$query -> bindParam(':id', $id);
 
 		$dbres = $query -> execute();
@@ -236,36 +236,6 @@ class Tarif {
 	}
 
 	/**
-	 *   Finder sur title
-	 *
-	 *   Retrouve la ligne de la table correspondant au title passé en paramètre,
-	 *   retourne un objet ou false si la page n'existe pas
-	 *
-	 *   @static
-	 *   @param integer $id OID to find
-	 *   @return Page renvoie un objet de type Page
-	 */
-	public static function findBySem($id) {
-
-		$pdo = Base::getConnection();
-		$query = $pdo -> prepare("SELECT * FROM Tarif WHERE sem_sej=:id");
-		$query -> bindParam(":id", $id);
-		//echo $query;
-		$dbres = $query -> execute();
-
-		$t = $query -> fetch(PDO::FETCH_ASSOC);
-
-		$tab = array();
-
-		foreach ($t as $tfact) {
-			$tab[] = Tarif::creerObjet($t);
-		}
-
-		return $tab;
-
-	}
-
-	/**
 	 *   Finder All
 	 *
 	 *   Renvoie toutes les lignes de la table Page
@@ -277,13 +247,6 @@ class Tarif {
 
 	public static function findAll() {
 
-		/**
-		 *    A ECRIRE ENTIEREMENT
-		 *    SELECTIONNE TOUTES LES LIGNES DE LA TABLE
-		 *    ET LES RETOURNE SOUS LA FORME D'UN TABLEAU D'OBJETS
-		 *
-		 *
-		 */
 
 		$pdo = Base::getConnection();
 		$query = "SELECT * FROM Tarif";
@@ -302,10 +265,11 @@ class Tarif {
 
 	public static function creerObjet($tab) {
 		$obj = new Tarif();
-		$obj -> setAttr('no_unite', $tab['NO_UNITE']);
-		$obj -> setAttr('sem_sej', $tab['SEM_SEJ']);
-		$obj -> setAttr('nb_places_offertes', $tab['NB_PLACES_OFFERTES']);
-		$obj -> setAttr('nb_places_occupees', $tab['NB_PLACES_OCCUPEES']);
+		$obj -> setAttr('en_ville', $tab['EN_VILLE']);
+		$obj -> setAttr('code_gf', $tab['CODE_GF']);
+		$obj -> setAttr('bons_vac', $tab['BONS_VAC']);
+		$obj -> setAttr('alloc_caf', $tab['ALLOC_CAF']);
+		$obj -> setAttr('tarif_jour', $tab['TARIF_JOUR']);
 		return $obj;
 	}
 
