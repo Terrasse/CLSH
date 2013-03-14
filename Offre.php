@@ -206,7 +206,7 @@ class Offre {
 		$pdo = Base::getConnection();
 
 		//preparation de la requete
-		$query = $pdo -> prepare("SELECT * FROM Offre WHERE no_unite=:id");
+		$query = $pdo -> prepare("SELECT * FROM offre WHERE no_unite=:id");
 		$query -> bindParam(':id', $id);
 
 		$dbres = $query -> execute();
@@ -233,7 +233,7 @@ class Offre {
 	public static function findBySem($id) {
 
 		$pdo = Base::getConnection();
-		$query = $pdo -> prepare("SELECT * FROM Offre WHERE sem_sej=:id");
+		$query = $pdo -> prepare("SELECT * FROM offre WHERE sem_sej=:id");
 		$query -> bindParam(":id", $id);
 		//echo $query;
 		$dbres = $query -> execute();
