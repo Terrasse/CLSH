@@ -217,18 +217,15 @@ public static function findByNum($num) {
 	
 	$dbres = $query->execute();
 	
-	$d=$query->fetch(PDO::FETCH_OBJ) ;
+	$t=$query->fetchAll(PDO::FETCH_ASSOC) ;
 
 	/**
 	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
 	*   OBJET INSTANCE DE LA CLASSE Page
 	*
 	*/
-	if ($d !== false){
-    	return unite::creerObjet($d);
-    }else{
-    	return false;
-    }
+
+	return Unite::creerObjet($tfact);
 }
 
 /**
@@ -307,7 +304,7 @@ public static function findBySite($id) {
     	$obj->setAttr('no_unite', $tab['NO_UNITE']);
     	$obj->setAttr('no_site_possede', $tab['NO_SITE_POSSÈDE']);
     	$obj->setAttr('no_site', $tab['NO_SITE']);
-		$obj->setAttr('nom_site', $tab['NOM_SITE']);
+		$obj->setAttr('nom_unite', $tab['NOM_UNITÉ']);
 		return $obj;
 	}
     

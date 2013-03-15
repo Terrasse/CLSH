@@ -9,25 +9,8 @@ body {
 	display: block;
 }
 
-.connect {
-	width: 1000px;
-	color: white;
-	background-image: url(images/menu.jpg);
-	border: 1px solid black;
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.connect p {
-	text-align: right;
-	color: white;
-}
-.connect a {
-	color: white;
-}
 header {
-	background-image: url(images/logo_wiki.jpg);
+	background-image: url(images/logo.fw.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	font-size: 20px;

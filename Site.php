@@ -191,7 +191,7 @@ class Site {
 
 		$dbres = $query -> execute();
 
-		$d = $query -> fetch(PDO::FETCH_OBJ);
+		$d = $query -> fetch(PDO::FETCH_ASSOC);
 
 		/**
 		 *   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
@@ -223,7 +223,7 @@ class Site {
 		//echo $query;
 		$dbres = $query -> execute();
 
-		$d = $query -> fetch(PDO::FETCH_OBJ);
+		$d = $query -> fetch(PDO::FETCH_ASSOC);
 
 		/**
 		 *   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE

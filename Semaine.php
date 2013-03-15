@@ -208,26 +208,23 @@ class Semaine{
 	*   @return Page renvoie un objet de type Page
 	*/
 public static function findByNum($num) {
+	
 	$pdo = Base::getConnection();
 	
 	//preparation de la requete
-	$query =$pdo->prepare("SELECT * FROM Semaine WHERE sem_sej=:num");
+	$query =$pdo->prepare("SELECT * FROM semaine WHERE sem_sej=:num");
 	$query->bindParam(':num',$num);
 	
 	$dbres = $query->execute();
 	
-	$d=$query->fetch(PDO::FETCH_OBJ) ;
-
+	$t=$query->fetch(PDO::FETCH_ASSOC) ;
+	
 	/**
 	*   A COMPLETER : CREER UN OBJET A PARTIR DE LA LIGNE
 	*   OBJET INSTANCE DE LA CLASSE Page
 	*
 	*/
-	if ($d !== false){
-    	return Semaine::creerObjet($d);
-    }else{
-    	return false;
-    }
+	return Semaine::creerObjet($t);
 }
 
     
@@ -259,7 +256,7 @@ public static function findByNum($num) {
      $tab = array();
           
      foreach ($t as $tfact){
-     	$tab[]=Semaine::creerObjet($t);
+     	$tab[]=Semaine::creerObjet($tfact);
      }
      
      return $tab;
@@ -270,7 +267,7 @@ public static function findByNum($num) {
 		$obj = new Semaine();
     	$obj->setAttr('sem_sej', $tab['SEM_SEJ']);
     	$obj->setAttr('du_sem', $tab['DU_SEM']);
-    	$obj->setAttr('au_sem', $tab['AU_SEM']);
+    	$obj->setAttr('au_sem', $tab['AU_EM']);
 		$obj->setAttr('nbj_sem', $tab['NBJ_SEM']);
 		return $obj;
 	}

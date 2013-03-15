@@ -1,4 +1,6 @@
 <?php
+require_once ('Semaine.php');
+require_once ('Unite.php');
 class Vue {
 	private $pages;
 	private static $contenuAutorise = array('site' => array('status' => 'getStatusSite', 'contenu' => 'getContenuSite'), 'disponibilite' => array('status' => 'getStatusDisponibilite', 'contenu' => 'getContenuDisponibilite'), 'famille' => array('status' => 'getStatusFamille', 'contenu' => 'getContenuFamille'), 'listetest' => array('status' => 'getStatusTest', 'contenu' => 'getContenuTest'));
@@ -64,26 +66,33 @@ class Vue {
 	// les methodes suivantes gèrent le contenu de l'affichage de disponibilités
 
 	private function getStatusDisponibilite() {
-		return "en Construction";
+		$site = Site::findByNum($_POST['no_site_sel']);
+		return "Recherche de disponibilite pour le site : ".$site->getAttr('nom_site');
 	}
 
 	private function getContenuDisponibilite() {
-		var_dump($this -> pages);
-		$resultat = "
+		$resultat = "";
+		$resultat .= "
 			<form method='post' action='index.php?action=disponibilite'>
 		   		<p>
 		   		Indiquez les périodes pour lequels vous souhaitez inscrire l'enfant ?
-		   		<input type='hidden' name='no_site_sel' value='" + $_POST['no_site_sel'] + "'>
-		   	";
+		   		<input type='hidden' name='no_site_sel' value='" . $_POST['no_site_sel'] . "'></br>";
+		$total=0;
 		foreach ($this->pages as $key => $value) {
-			$nbPlaceDispo = $value -> getAttr('nb_places_offertes') - $value -> getAttr('nb_places_occupees');
+			$value1 = $value -> getAttr('nb_places_offertes');
+			$value2 = $value -> getAttr('nb_places_occupees');
+			$nbPlaceDispo = $value1 - $value2;
 			if ($nbPlaceDispo > 1) {
+				$total=$total+1;
 				$semaine = Semaine::findByNum($value -> getAttr('sem_sej'));
 				$unite = Unite::findByNum($value -> getAttr('no_unite'));
-				$resultat .= "<input type='checkbox' name='" + $value -> getAttr('no_unite_sel') + "' id='" + $value -> getAttr('no_unite_sel') + "' /> <label for='" + $value -> getAttr('no_unite_sel') + "'>" + $unite -> getAttr('nom_unite') + " du " + $semaine -> getAttr('du_sem') + " au " + $semaine -> getAttr('au_sem') + " | nombre de place disponible : " + $nbPlaceDispo + "</label>";
-			}
+				$resultat .="<label for='" . $value -> getAttr('sem_sej') . "'>" . $unite -> getAttr('nom_unite') . " du " . $semaine -> getAttr('du_sem') . " au " . $semaine -> getAttr('au_sem') . "  nombre de place disponible : " . $nbPlaceDispo . "</label>";
+				$resultat .= "<input type='checkbox' name='" . $value -> getAttr('sem_sej') . "' id='" . $value -> getAttr('sem_sej') . "' /></br>";
+				}
 		}
-		var_dump($resultat);
+		if($total==0){
+			return $resultat="<p> Il n'y a plus aucune disponibilite pour ce site.</p>";
+		} 
 		$resultat .= "
 				<input type='submit' value='Valider'/>
 				</p>

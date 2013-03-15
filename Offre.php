@@ -211,8 +211,7 @@ class Offre {
 
 		$dbres = $query -> execute();
 
-		$t = $query -> fetch(PDO::FETCH_ASSOC);
-
+		$t = $query -> fetchAll(PDO::FETCH_ASSOC);
 		$tab = array();
 		foreach ($t as $tfact) {
 			$tab[] = Offre::creerObjet($tfact);
@@ -241,9 +240,9 @@ class Offre {
 		$t = $query -> fetch(PDO::FETCH_ASSOC);
 
 		$tab = array();
-
+		
 		foreach ($t as $tfact) {
-			$tab[] = Offre::creerObjet($t);
+			$tab[] = Offre::creerObjet($tfact);
 		}
 
 		return $tab;
@@ -270,7 +269,7 @@ class Offre {
 		$tab = array();
 
 		foreach ($t as $tfact) {
-			$tab[] = Offre::creerObjet($t);
+			$tab[] = Offre::creerObjet($tfact);
 		}
 
 		return $tab;
