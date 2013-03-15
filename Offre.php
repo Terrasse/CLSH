@@ -232,7 +232,7 @@ class Offre {
 	public static function findBySem($id) {
 
 		$pdo = Base::getConnection();
-		$query = $pdo -> prepare("SELECT * FROM Offre WHERE sem_sej=:id");
+		$query = $pdo -> prepare("SELECT * FROM offre WHERE sem_sej=:id");
 		$query -> bindParam(":id", $id);
 		//echo $query;
 		$dbres = $query -> execute();
