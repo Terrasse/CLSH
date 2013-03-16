@@ -214,7 +214,7 @@ class Tarif {
 	 *   @param integer $id OID to find
 	 *   @return Page renvoie un objet de type Page
 	 */
-	public static function findByVille($id) {
+	public static function findAllByVille($id) {
 		var_dump($id);
 		$pdo = Base::getConnection();
 
